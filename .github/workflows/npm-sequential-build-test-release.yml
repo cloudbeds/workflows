@@ -1,29 +1,45 @@
-name: Publish npm package
+# Generic workflow to lint, build, test and publish an npm package
+# Output is expected to be in "dist" folder
+# Suitable for cases when testing should be done on the build artifact
+
+name: Build, Test and Publish npm package
 
 on:
   workflow_call:
-    inputs:
-      artifactName:
-        description: 'Optionally download build artifacts'
-        required: false
-        type: string
     secrets:
       NPM_TOKEN:
         required: true
 
 jobs:
-  release:
-    name: Release 🚀
+  test-build-release:
+    name: Lint, Build, Test, Publish
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Download artifact
-        if: inputs.artifactName
-        uses: actions/download-artifact@v2
+      - name: Initialize npm cache
+        uses: actions/setup-node@v2
         with:
-          name: ${{ inputs.artifactName }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm config set audit=false fund=false
+          npm ci
+
+      - name: Lint
+        run: |
+          npm run lint --if-present
+          npm run lint:ts --if-present
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Test
+        run: npm test --if-present
 
       - name: Create config file for Semantic Release
         run: |
@@ -40,9 +56,8 @@ jobs:
           }
           EOF
 
-      - name: Semantic Release
+      - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v2
-        id: semantic
         with:
           branch: main
           semantic_version: 18
