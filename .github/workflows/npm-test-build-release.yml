@@ -79,6 +79,7 @@ jobs:
 
   publish:
     name: Publish 🚀
+    runs-on: ubuntu-latest
     needs: [lint, test, build]
     # cannot call another workflow e.g. "uses: cloudbeds/workflows/.github/workflows/npm-semantic-release.yml@main"
     # as it results in an error: "doing so would exceed the limit on called workflow depth of 2"
