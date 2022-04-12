@@ -80,6 +80,43 @@ jobs:
   publish:
     name: Publish 🚀
     needs: [lint, test, build]
-    uses: cloudbeds/workflows/.github/workflows/npm-semantic-release.yml@main
-    with:
-      artifactName: build-artifact
+    # cannot call another workflow e.g. "uses: cloudbeds/workflows/.github/workflows/npm-semantic-release.yml@main"
+    # as it results in an error: "doing so would exceed the limit on called workflow depth of 2"
+    # TODO - find a way to call another workflow or try creating and using a composite action
+    # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifact
+
+      - name: Create config file for Semantic Release
+        run: |
+          [ -f .releaserc ] || cat << EOF > .releaserc
+          {
+            "plugins": [
+              "@semantic-release/commit-analyzer",
+              "@semantic-release/release-notes-generator",
+              "@semantic-release/changelog",
+              "@semantic-release/npm",
+              "@semantic-release/github",
+              "@semantic-release/git"
+            ]
+          }
+          EOF
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          branch: main
+          semantic_version: 18
+          extra_plugins: |
+            @semantic-release/changelog@6
+            @semantic-release/git@10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
