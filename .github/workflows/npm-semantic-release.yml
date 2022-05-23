@@ -4,7 +4,11 @@ on:
   workflow_call:
     inputs:
       artifactName:
-        description: 'Optionally download build artifacts'
+        description: 'Name of the uploaded build artifact'
+        required: false
+        type: string
+      artifactPath:
+        description: 'Destination path for the downloaded build artifcat'
         required: false
         type: string
     secrets:
@@ -21,9 +25,10 @@ jobs:
 
       - name: Download artifact
         if: inputs.artifactName
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.artifactName }}
+          path: ${{ inputs.artifactPath }}
 
       - name: Create config file for Semantic Release
         run: |
