@@ -8,8 +8,6 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
-      GH_TOKEN:
-        required: true
 
 jobs:
   lint:
@@ -122,5 +120,5 @@ jobs:
             @semantic-release/changelog@6
             @semantic-release/git@10
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
