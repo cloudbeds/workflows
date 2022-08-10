@@ -9,6 +9,8 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
+      GH_TOKEN:
+        required: true
 
 jobs:
   test-build-release:
@@ -18,7 +20,9 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Initialize npm cache
         uses: actions/setup-node@v2
@@ -65,5 +69,5 @@ jobs:
             @semantic-release/changelog@6
             @semantic-release/git@10
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
