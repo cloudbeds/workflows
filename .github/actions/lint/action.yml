@@ -1,0 +1,25 @@
+name: Code Lint
+description: Eslint code linter
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Initialize npm cache
+      uses: actions/setup-node@v3
+      with:
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        npm config set audit=false fund=false
+        npm ci
+
+    - name: Lint
+      shell: bash
+      run: |
+        npm run lint --if-present
+        npm run lint:ts --if-present

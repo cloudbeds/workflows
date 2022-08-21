@@ -1,5 +1,5 @@
 # Generic workflow for a push event
-# It should be used for all branches except `main` which should use the `release` workflow
+# It should be used for all branches except `main` which should use the `*-release` workflow
 
 name: Lint, Test and Build
 
@@ -13,61 +13,26 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Initialize npm cache
-        uses: actions/setup-node@v2
-        with:
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          npm config set audit=false fund=false
-          npm ci
-
       - name: Lint
-        run: |
-          npm run lint --if-present
-          npm run lint:ts --if-present
+        uses: cloudbeds/workflows/.github/actions/lint
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   test:
     name: Test
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        with:
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          npm config set audit=false fund=false
-          npm ci
-
       - name: Test
-        run: npm test --if-present
+        uses: cloudbeds/workflows/.github/actions/test
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-        with:
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          npm config set audit=false fund=false
-          npm ci
-
       - name: Build
-        run: npm run build --if-present
+        uses: cloudbeds/workflows/.github/actions/build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

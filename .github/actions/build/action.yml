@@ -1,0 +1,35 @@
+name: Build
+description: Github action to build node projects
+
+inputs:
+  artifactPath:
+    description: Destination path for the downloaded build artifact
+    default: dist
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Initialize npm cache
+      uses: actions/setup-node@v3
+      with:
+        cache: npm
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        npm config set audit=false fund=false
+        npm ci
+
+    - name: Build
+      shell: bash
+      run: npm run build
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build-artifact
+        path: ${{ inputs.artifactPath }}
+        if-no-files-found: error
