@@ -1,0 +1,19 @@
+name: Invalidate CloudFront Cache
+description: Github action to invalidate cache from cloudfront
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.6.0
+      with:
+        role-to-assume: ${{ env.AWS_ARN }}
+        role-session-name: session-mfd-fe-gh-actions
+        aws-region: us-west-2
+
+    - name: Invalidate CloudFront cache
+      shell: bash
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ env.DISTRIBUTION_ID }} \
+          --paths "${{ env.CLOUDFRONT_PATH }}/*"

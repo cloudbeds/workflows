@@ -1,4 +1,4 @@
-name: Semantic release
+name: Semantic Release
 
 on:
   workflow_call:
@@ -9,6 +9,7 @@ on:
         type: string
       artifactPath:
         description: 'Destination path for the downloaded build artifcat'
+        default: dist
         required: false
         type: string
     secrets:
@@ -20,40 +21,9 @@ jobs:
     name: Release 🚀
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Download artifact
-        if: inputs.artifactName
-        uses: actions/download-artifact@v3
+      - name: Semantic Release
+        uses: cloudbeds/workflows/.github/actions/semantic-release
         with:
           name: ${{ inputs.artifactName }}
           path: ${{ inputs.artifactPath }}
-
-      - name: Create config file for Semantic Release
-        run: |
-          [ -f .releaserc ] || cat << EOF > .releaserc
-          {
-            "plugins": [
-              "@semantic-release/commit-analyzer",
-              "@semantic-release/release-notes-generator",
-              "@semantic-release/changelog",
-              "@semantic-release/github",
-              "@semantic-release/git"
-            ]
-          }
-          EOF
-
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic
-        with:
-          branch: main
-          semantic_version: 18
-          extra_plugins: |
-            @semantic-release/changelog@6
-            @semantic-release/git@10
-        env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

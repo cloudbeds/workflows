@@ -1,0 +1,51 @@
+name: Upload to S3
+description: Github action to upload code to S3 bucket
+
+inputs:
+  artifactName:
+    description: Name of the uploaded build artifact
+    required: true
+  artifactPath:
+    description: Destination path for the downloaded build artifact
+    default: dist
+    required: false
+  AWS_ARN:
+    description: AWS Amazon Resource Number
+    required: true
+  S3_URL:
+    description: URL to an S3 bucket folder
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.6.0
+      with:
+        role-to-assume: ${{ inputs.AWS_ARN }}
+        role-session-name: session-mfd-fe-gh-actions
+        aws-region: us-west-2
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: ${{ inputs.artifactName }}
+        path: ${{ inputs.artifactPath }}
+
+    - name: Listing of files to be uploaded
+      shell: bash
+      run: ls -la ./${{ inputs.artifactPath }}
+
+    - name: Contents of S3 bucket
+      shell: bash
+      run: |
+        S3BucketContents=$(aws s3 ls $S3_URL)
+        echo "$S3BucketContents"
+
+    - name: Upload to S3
+      shell: bash
+      run: |
+        aws s3 sync ${{ inputs.artifactPath }} ${{ inputs.S3_URL }} --cache-control no-cache
+
+        echo "::group::Uploaded files"
+        aws s3 ls ${{ inputs.S3_URL }}/ --recursive --human-readable --summarize
+        echo "::endgroup::"
