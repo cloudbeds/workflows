@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint
-        uses: cloudbeds/workflows/.github/actions/lint
+        uses: cloudbeds/workflows/.github/actions/lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test
-        uses: cloudbeds/workflows/.github/actions/test
+        uses: cloudbeds/workflows/.github/actions/test@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -33,6 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build
-        uses: cloudbeds/workflows/.github/actions/build
+        uses: cloudbeds/workflows/.github/actions/build@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
