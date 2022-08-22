@@ -21,7 +21,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/lint
+      - uses: cloudbeds/workflows/.github/actions/lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -29,7 +29,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/test
+      - uses: cloudbeds/workflows/.github/actions/test@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -37,7 +37,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/build
+      - uses: cloudbeds/workflows/.github/actions/build@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -47,7 +47,7 @@ jobs:
     needs: [lint, test, build]
     steps:
       - name: Semantic Release
-        uses: cloudbeds/workflows/.github/actions/semantic-release
+        uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
           name: build-artifact
           path: ${{ inputs.artifactPath }}
