@@ -26,7 +26,6 @@ runs:
       uses: actions/checkout@v3
 
     - name: Download artifact
-      if: inputs.artifactName
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifactName }}

@@ -5,6 +5,7 @@ on:
     inputs:
       artifactName:
         description: 'Name of the uploaded build artifact'
+        default: build-artifact
         required: false
         type: string
       artifactPath:
