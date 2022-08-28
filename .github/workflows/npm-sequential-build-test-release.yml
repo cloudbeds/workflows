@@ -57,7 +57,7 @@ jobs:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
-          name: build-artifact
-          path: ${{ inputs.artifactPath }}
+          artifactName: build-artifact
+          artifactPath: ${{ inputs.artifactPath }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
