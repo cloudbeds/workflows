@@ -9,12 +9,12 @@ inputs:
     description: Destination path for the downloaded build artifact
     default: dist
     required: false
-  GITHUB_TOKEN:
-    description: Secret Cloudbeds Github token with write permission
-    required: true
   publishToNpm:
     description: Enable this to publish artifacts to NPM
     required: false
+  GITHUB_TOKEN:
+    description: Secret Cloudbeds Github token with write permission
+    required: true
   NPM_TOKEN:
     description: Secret NPM token
     required: false
@@ -24,6 +24,8 @@ runs:
   steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download artifact
       uses: actions/download-artifact@v3

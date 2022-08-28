@@ -28,5 +28,6 @@ jobs:
         with:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}
+          publishToNpm: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
