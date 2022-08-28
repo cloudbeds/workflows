@@ -25,7 +25,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.GITHUB_TOKEN }}
 
     - name: Download artifact
       uses: actions/download-artifact@v3
