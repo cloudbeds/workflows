@@ -31,7 +31,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
 
-    - if: inputs.withoutBuiltArtifact =='true'
+    - if: inputs.withoutBuiltArtifact != 'true'
       name: Download artifact
       uses: actions/download-artifact@v3
       with:
