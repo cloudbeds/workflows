@@ -9,7 +9,6 @@ on:
         type: string
       artifactPath:
         description: 'Destination path for the downloaded build artifcat'
-        default: dist
         required: false
         type: string
     secrets:
@@ -28,6 +27,7 @@ jobs:
         with:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}
+          withoutBuiltArtifact: ${{ !inputs.artifactName && 'true' }}
           publishToNpm: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
