@@ -38,6 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: cloudbeds/workflows/.github/actions/build@main
+        with:
+          artifactPath: ${{ inputs.artifactPath }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -49,7 +51,6 @@ jobs:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
-          artifactName: build-artifact
           artifactPath: ${{ inputs.artifactPath }}
           publishToNpm: true
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
