@@ -31,10 +31,6 @@ runs:
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
 
-    - name: Artifact Path
-      shell: bash
-      run: echo ${{ inputs.artifactPath }}/${{ inputs.artifactName }}
-
     - if: inputs.withoutBuiltArtifact =='true'
       name: Download artifact
       uses: actions/download-artifact@v3

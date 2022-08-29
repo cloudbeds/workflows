@@ -2,6 +2,10 @@ name: Build
 description: Github action to build node projects
 
 inputs:
+  artifactName:
+    description: Name of the uploaded build artifact
+    default: build-artifact
+    required: false
   artifactPath:
     description: Destination path for the downloaded build artifact
     default: dist
@@ -30,6 +34,6 @@ runs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: build-artifact
+        name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
         if-no-files-found: error

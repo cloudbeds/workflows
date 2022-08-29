@@ -4,11 +4,11 @@ on:
   workflow_call:
     inputs:
       artifactName:
-        description: 'Name of the uploaded build artifact'
+        description: Name of the uploaded build artifact
         required: false
         type: string
       artifactPath:
-        description: 'Destination path for the downloaded build artifcat'
+        description: Destination path for the downloaded build artifact
         required: false
         type: string
     secrets:
