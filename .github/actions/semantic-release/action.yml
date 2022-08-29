@@ -4,10 +4,14 @@ description: Release
 inputs:
   artifactName:
     description: Name of the uploaded build artifact
+    default: build-artifact
     required: false
   artifactPath:
     description: Destination path for the downloaded build artifact
     default: dist
+    required: false
+  withoutBuiltArtifact:
+    description: Indicates that no artifact should be downloaded
     required: false
   publishToNpm:
     description: Enable this to publish artifacts to NPM
@@ -27,7 +31,12 @@ runs:
       with:
         token: ${{ inputs.GITHUB_TOKEN }}
 
-    - name: Download artifact
+    - name: Artifact Path
+      shell: bash
+      run: echo ${{ inputs.artifactPath }}/${{ inputs.artifactName }}
+
+    - if: inputs.withoutBuiltArtifact =='true'
+      name: Download artifact
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifactName }}
