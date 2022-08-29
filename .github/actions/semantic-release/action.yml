@@ -4,7 +4,7 @@ description: Release
 inputs:
   artifactName:
     description: Name of the uploaded build artifact
-    required: true
+    required: false
   artifactPath:
     description: Destination path for the downloaded build artifact
     default: dist
