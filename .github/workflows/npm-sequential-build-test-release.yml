@@ -18,8 +18,8 @@ on:
         type: string
 
 jobs:
-  test-build-release:
-    name: Lint, Build, Test, Publish
+  test-and-build:
+    name: Lint, Build, Test
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -54,6 +54,11 @@ jobs:
           name: build-artifact
           path: ${{ inputs.artifactPath }}
 
+  release:
+    name: Publish to NPM 🚀
+    runs-on: ubuntu-latest
+    needs: test-and-build
+    steps:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:

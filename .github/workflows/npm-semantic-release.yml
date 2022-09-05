@@ -19,7 +19,7 @@ on:
 
 jobs:
   release:
-    name: Release and publish to NPM 🚀
+    name: Publish to NPM 🚀
     runs-on: ubuntu-latest
     steps:
       - name: Semantic Release
