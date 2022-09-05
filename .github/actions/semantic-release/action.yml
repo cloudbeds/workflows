@@ -38,17 +38,26 @@ runs:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
 
+    - name: Create config file for Semantic Release
+      shell: bash
+      run: |
+        cat << EOF > .releaserc
+        {
+          "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            "@semantic-release/changelog",
+            ${{inputs.publishToNpm == 'true' && '"@semantic-release/npm",' || ''}}
+            "@semantic-release/github",
+            "@semantic-release/git"
+          ]
+        }
+        EOF
+
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       with:
         branch: main
-        extra_plugins: |
-          @semantic-release/commit-analyzer
-          @semantic-release/release-notes-generator
-          @semantic-release/changelog
-          ${{inputs.publishToNpm == 'true' && '@semantic-release/npm' || ''}}
-          @semantic-release/github
-          @semantic-release/git
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
