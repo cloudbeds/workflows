@@ -20,13 +20,11 @@ runs:
   using: composite
   steps:
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1.6.0
+      uses: cloudbeds/workflows/.github/actions/configure-aws@main
       with:
         role-to-assume: ${{ inputs.AWS_ARN }}
-        role-session-name: session-mfd-fe-gh-actions
-        aws-region: us-west-2
 
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
