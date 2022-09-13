@@ -47,7 +47,9 @@ runs:
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",
             "@semantic-release/changelog",
-            ${{inputs.publishToNpm == 'true' && '"@semantic-release/npm",' || ''}}
+            ["@semantic-release/npm", {
+              "npmPublish": ${{inputs.publishToNpm == 'true'}},
+            }],  
             "@semantic-release/github",
             "@semantic-release/git"
           ]
