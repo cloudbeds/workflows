@@ -1,0 +1,70 @@
+name: Configure AWS credentials
+description: Github action to configure AWS credentials
+
+inputs:
+  aws-region:
+    description: AWS Region
+    default: us-west-2
+    required: false
+  role-session-name:
+    description: AWS Role Session Name
+    default: session-mfd-fe-gh-actions
+    required: false
+  role-to-assume:
+    description: AWS Role ARN
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      id: aws-auth
+      continue-on-error: true
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-session-name: ${{ inputs.role-session-name }}
+
+    - name: Sleep
+      shell: bash
+      if: steps.aws-auth.outcome != 'success'
+      run: echo Delaying for 15 seconds; sleep 15s
+
+    - name: Configure AWS credentials Retry
+      id: aws-auth2
+      continue-on-error: true
+      if: steps.aws-auth.outcome != 'success'
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-session-name: ${{ inputs.role-session-name }}
+
+    - name: Sleep
+      shell: bash
+      if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success'
+      run: echo Delaying for 30 seconds; sleep 30s
+
+    - name: Configure AWS credentials 2nd Retry
+      id: aws-auth3
+      continue-on-error: true
+      if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success'
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-session-name: ${{ inputs.role-session-name }}
+
+    - name: Sleep
+      shell: bash
+      if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success' && steps.aws-auth3.outcome != 'success'
+      run: echo Delaying for 60 seconds; sleep 60s
+
+    - name: Configure AWS credentials 3rd Retry
+      if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success' && steps.aws-auth3.outcome != 'success'
+      uses: aws-actions/configure-aws-credentials@v1.7.0
+      with:
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-session-name: ${{ inputs.role-session-name }}
