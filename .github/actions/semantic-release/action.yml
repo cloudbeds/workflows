@@ -24,13 +24,13 @@ inputs:
     required: false
 
 outputs:
-  released:
+  isReleased:
     description: Whether a new release was published. Contains "true" or "false" string
     value: ${{ steps.semantic-release.outputs.new_release_published }}
-  version:
+  releasedVersion:
     description: The version of the release that actually happened
     value: ${{ steps.semantic-release.outputs.new_release_version }}
-  previous-version:
+  previousVersion:
     description: Version of the previous release, if there was one
     value: ${{ steps.semantic-release.outputs.last_release_version }}
 
