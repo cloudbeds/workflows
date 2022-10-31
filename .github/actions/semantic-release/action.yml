@@ -88,4 +88,10 @@ runs:
       id: released-sha
       shell: bash
       run: |
+        if [[ ${{ steps.semantic-release.outputs.new_release_published }} == true ]]; then
+          echo "::notice::Application version was updated to ${{ steps.semantic-release.outputs.new_release_version }}"
+        else
+          echo "::warning::No new version is released"
+          echo "::warning::Make sure that commit messages follow the semantic-release format"
+        fi
         echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
