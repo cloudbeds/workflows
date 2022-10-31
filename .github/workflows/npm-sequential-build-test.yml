@@ -25,6 +25,11 @@ on:
         default: ''
         required: false
         type: string
+      BUILD_ENV_VARS:
+        description: Environment variables to pass to the build step
+        default: ''
+        required: false
+        type: string
 
 jobs:
   build-and-test:
@@ -49,7 +54,7 @@ jobs:
           npm ci
 
       - name: Build
-        run: ${{ inputs.BUILD_ENV }} npm run build
+        run: ${{ inputs.BUILD_ENV_VARS }} npm run build
 
       # In this workflow testing should happen after Build step
       # e.g. for case when remote types are downloaded with webpack
