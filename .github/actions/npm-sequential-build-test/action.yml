@@ -80,7 +80,7 @@ runs:
         echo "{
           \"sha\": \"$SHA\",
           \"shaShort\": \"$SHA_SHORT\",
-          \"version\": \"${{ steps.version-from-package-json.outputs.appVersion }}\",
+          \"version\": \"${{ steps.version-from-package-json.outputs.current-version }}\",
           \"viewAction\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",
           \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
           \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",
