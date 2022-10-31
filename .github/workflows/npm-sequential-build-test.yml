@@ -41,7 +41,8 @@ jobs:
       - name: Checkout
         # https://github.com/actions/checkout v3.1.0
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
-        ref: ${{ inputs.ref }}
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Initialize npm cache
         uses: actions/setup-node@v3
@@ -65,6 +66,24 @@ jobs:
 
       - name: Test
         run: npm test --if-present
+
+      - name: Get version number from package.json
+        id: version-from-package-json
+        uses: cloudbeds/workflows/.github/actions/get-version-from-package-json@main
+
+      - name: Write build info
+        run: |
+          SHA=$(git rev-parse HEAD)
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          echo "{
+            \"sha\": \"$SHA\",
+            \"shaShort\": \"$SHA_SHORT\",
+            \"version\": \"${{ steps.version-from-package-json.outputs.appVersion }}\",
+            \"viewAction\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",
+            \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
+            \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",
+            \"viewLastCommit\": \"https://github.com/${{ github.repository }}/commit/$SHA\"
+          }" > build-info.json
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
