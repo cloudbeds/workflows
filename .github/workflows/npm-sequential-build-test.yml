@@ -33,7 +33,6 @@ on:
       appVersion:
         description: App version from package.json
         value: ${{ jobs.build-and-test.outputs.appVersion }}
-        type: string
 
 jobs:
   build-and-test:
