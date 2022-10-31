@@ -27,8 +27,8 @@ on:
         type: string
 
 jobs:
-  test-and-build:
-    name: Lint, Build, Test
+  build-and-test:
+    name: Build, Lint, Test
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
