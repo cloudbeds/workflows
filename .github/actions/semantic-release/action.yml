@@ -33,6 +33,9 @@ outputs:
   previousVersion:
     description: Version of the previous release, if there was one
     value: ${{ steps.semantic-release.outputs.last_release_version }}
+  ref:
+    description: The branch, tag or SHA that was released, that contains the [skip-ci] commit
+    value: ${{ steps.released_ref.outputs.REF }}
 
 runs:
   using: composite
@@ -80,3 +83,9 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
+
+    - name: Output commit hash
+      id: released-ref
+      shell: bash
+      run: |
+        echo "REF=$(git rev-parse HEAD)" >> $GITHUB_ENV
