@@ -1,17 +1,28 @@
 name: Invalidate CloudFront Cache
 description: Github action to invalidate cache from cloudfront
 
+inputs:
+  AWS_ARN:
+    description: AWS ARN to assume
+    required: true
+  DISTRIBUTION_ID:
+    description: CloudFront distribution ID
+    required: true
+  CLOUDFRONT_INVALIDATION_PATH:
+    description: CloudFront invalidation path
+    required: true
+
 runs:
   using: composite
   steps:
     - name: Configure AWS credentials
       uses: cloudbeds/workflows/.github/actions/configure-aws@main
       with:
-        role-to-assume: ${{ env.AWS_ARN }}
+        role-to-assume: ${{ inputs.AWS_ARN }}
 
     - name: Invalidate CloudFront cache
       shell: bash
       run: |
         aws cloudfront create-invalidation \
-          --distribution-id ${{ env.DISTRIBUTION_ID }} \
-          --paths "${{ env.CLOUDFRONT_PATH }}/*"
+          --distribution-id ${{ inputs.DISTRIBUTION_ID }} \
+          --paths "${{ inputs.CLOUDFRONT_INVALIDATION_PATH }}/*"
