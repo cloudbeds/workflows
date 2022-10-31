@@ -24,8 +24,8 @@ on:
         default: ''
         required: false
         type: string
-      BUILD_ENV_VARS:
-        description: Environment variables to pass to the build step
+      envVars:
+        description: List of environment variables to set up, given in VAR=value format.
         default: ''
         required: false
         type: string
@@ -58,8 +58,16 @@ jobs:
           npm config set audit=false fund=false
           npm ci
 
+      - name: Set environment variables
+        if: inputs.envVars
+        run: |
+          for i in "${{ inputs.env_vars }}"
+          do
+            printf "%s\n" $i >> $GITHUB_ENV
+          done
+
       - name: Build
-        run: ${{ inputs.BUILD_ENV_VARS }} npm run build
+        run: npm run build
 
       # In this workflow testing should happen after Build step
       # e.g. for case when remote types are downloaded with webpack
