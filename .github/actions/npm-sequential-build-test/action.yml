@@ -47,8 +47,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-#        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-#
+        # echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
         npm config set audit=false fund=false
         NPM_TOKEN=${{ inputs.NPM_TOKEN }} npm ci
 
