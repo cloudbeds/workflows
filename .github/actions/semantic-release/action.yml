@@ -35,7 +35,7 @@ outputs:
     value: ${{ steps.semantic-release.outputs.last_release_version }}
   releasedSHA:
     description: The SHA of the commit that was released, that contains the [skip-ci] commit
-    value: ${{ steps.released_ref.outputs.SHA }}
+    value: ${{ steps.released-sha.outputs.SHA }}
 
 runs:
   using: composite
