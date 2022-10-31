@@ -13,22 +13,27 @@ on:
         description: Name of the build artifact
         default: build-artifact
         required: false
+        type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
         default: dist
         required: false
+        type: string
       ref:
         description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
         default: ''
         required: false
+        type: string
       BUILD_ENV_VARS:
         description: Environment variables to pass to the build step
         default: ''
         required: false
+        type: string
     outputs:
       appVersion:
         description: App version from package.json
         value: ${{ jobs.build-and-test.outputs.appVersion }}
+        type: string
 
 jobs:
   build-and-test:
