@@ -94,4 +94,4 @@ runs:
           echo "::warning::No new version is released"
           echo "::warning::Make sure that commit messages follow the semantic-release format"
         fi
-        echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
