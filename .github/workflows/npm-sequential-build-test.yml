@@ -69,7 +69,8 @@ jobs:
 
       - name: Get version number from package.json
         id: version-from-package-json
-        uses: cloudbeds/workflows/.github/actions/get-version-from-package-json@main
+        # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
+        uses: martinbeentjes/npm-get-version-action@7aa1d82604bb2dbe377a64ca35e692e6fe333c9c
 
       - name: Write build info
         run: |

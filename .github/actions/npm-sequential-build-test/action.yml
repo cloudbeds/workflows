@@ -25,6 +25,11 @@ inputs:
     default: ''
     required: false
 
+outputs:
+  appVersion:
+    description: App version from package.json
+    value: ${{ steps.version-from-package-json.outputs.current-version }}
+
 runs:
   using: composite
   steps:
@@ -62,9 +67,10 @@ runs:
       shell: bash
       run: npm test --if-present
 
-    - name: Get version number from package.json
+    - name: Get version from package.json
       id: version-from-package-json
-      uses: cloudbeds/workflows/.github/actions/get-version-from-package-json@main
+      # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
+      uses: martinbeentjes/npm-get-version-action@7aa1d82604bb2dbe377a64ca35e692e6fe333c9c
 
     - name: Write build info
       shell: bash
