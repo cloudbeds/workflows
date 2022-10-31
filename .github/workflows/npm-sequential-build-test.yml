@@ -1,19 +1,28 @@
-# Generic workflow to lint, build, test and publish an npm package
-# Suitable for cases when testing should be done on the build artifact
+# Generic workflow to lint, build and test a repo
+# In this workflow the build step happens before testing
+# Required for workflows where remote entry types are downloaded within the webpack build
 
-name: Build, Test and Publish npm package
+name: Build and Test
 
 on:
   workflow_call:
     secrets:
       NPM_TOKEN:
         required: true
-      GH_TOKEN:
-        required: true
     inputs:
+      artifactName:
+        description: Name of the build artifact
+        default: build-artifact
+        required: false
+        type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
         default: dist
+        required: false
+        type: string
+      ref:
+        description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
+        default: ''
         required: false
         type: string
 
@@ -27,6 +36,7 @@ jobs:
       - name: Checkout
         # https://github.com/actions/checkout v3.1.0
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+        ref: ${{ inputs.ref }}
 
       - name: Initialize npm cache
         uses: actions/setup-node@v3
@@ -38,13 +48,15 @@ jobs:
           npm config set audit=false fund=false
           npm ci
 
+      - name: Build
+        run: ${{ inputs.BUILD_ENV }} npm run build
+
+      # In this workflow testing should happen after Build step
+      # e.g. for case when remote types are downloaded with webpack
       - name: Lint
         run: |
           npm run lint --if-present
           npm run lint:ts --if-present
-
-      - name: Build
-        run: npm run build --if-present
 
       - name: Test
         run: npm test --if-present
@@ -52,19 +64,5 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifact
+          name: ${{ inputs.artifactName }}
           path: ${{ inputs.artifactPath }}
-
-  release:
-    name: Publish to NPM 🚀
-    runs-on: ubuntu-latest
-    needs: test-and-build
-    steps:
-      - name: Semantic Release
-        uses: cloudbeds/workflows/.github/actions/semantic-release@main
-        with:
-          artifactName: build-artifact
-          artifactPath: ${{ inputs.artifactPath }}
-          publishToNpm: true
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
