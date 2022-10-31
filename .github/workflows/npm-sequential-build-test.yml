@@ -83,7 +83,7 @@ jobs:
             \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
             \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",
             \"viewLastCommit\": \"https://github.com/${{ github.repository }}/commit/$SHA\"
-          }" > build-info.json
+          }" > ${{ inputs.artifactPath }}/build-info.json
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
