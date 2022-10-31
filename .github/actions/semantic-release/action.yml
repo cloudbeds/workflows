@@ -34,7 +34,7 @@ outputs:
     description: Version of the previous release, if there was one
     value: ${{ steps.semantic-release.outputs.last_release_version }}
   releasedSHA:
-    description: The branch, tag or SHA that was released, that contains the [skip-ci] commit
+    description: The SHA of the commit that was released, that contains the [skip-ci] commit
     value: ${{ steps.released_ref.outputs.SHA }}
 
 runs:
