@@ -19,9 +19,9 @@ on:
         default: dist
         required: false
         type: string
-      jobNameSuffix:
-        description: Suffix to append to the name of the job
-        default: ''
+      jobName:
+        description: Custom job name
+        default: Build, Lint, Test
         required: false
         type: string
       ref:
@@ -41,7 +41,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Build, Lint, Test ${{ inputs.jobNameSuffix }}
+    name: ${{ inputs.jobNameSuffix }}
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
