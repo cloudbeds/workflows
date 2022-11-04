@@ -63,16 +63,10 @@ jobs:
           npm config set audit=false fund=false
           npm ci
 
-      - name: Set environment variables
-        if: inputs.envVars
-        run: |
-          for i in "${{ inputs.envVars }}"
-          do
-            printf "%s\n" $i >> $GITHUB_ENV
-          done
-
       - name: Build
-        run: npm run build
+        run: |
+          ${{ inputs.envVars }}
+          npm run build
 
       # In this workflow testing should happen after Build step
       # e.g. for case when remote types are downloaded with webpack
