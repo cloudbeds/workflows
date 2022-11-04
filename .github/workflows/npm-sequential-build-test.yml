@@ -65,6 +65,9 @@ jobs:
 
       - name: Build
         run: |
+          for envVar in "${{ inputs.env_vars }}"; do
+            export $envVar
+          done
           ${{ inputs.envVars }}
           npm run build
 
