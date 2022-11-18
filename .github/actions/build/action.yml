@@ -10,6 +10,10 @@ inputs:
     description: Destination path for the downloaded build artifact
     default: dist
     required: false
+  npmScript:
+    description: Custom build script name
+    default: build
+    required: false
 
 runs:
   using: composite
@@ -31,7 +35,7 @@ runs:
 
     - name: Build
       shell: bash
-      run: npm run build
+      run: npm run ${{ inputs.npmScript }}
 
     - uses: actions/upload-artifact@v3
       with:
