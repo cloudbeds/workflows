@@ -16,6 +16,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
+        export HUSKY=0
         npm config set audit=false fund=false
         npm ci
 
