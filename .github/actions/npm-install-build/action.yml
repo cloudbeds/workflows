@@ -1,4 +1,4 @@
-name: Build
+name: NPM Install and Build
 description: Github action to build node projects
 
 inputs:
@@ -22,20 +22,7 @@ runs:
       # https://github.com/actions/checkout v3.1.0
       uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
-    - name: Initialize npm cache
-      uses: actions/setup-node@v3
-      with:
-        cache: npm
-
-    - uses: cloudbeds/workflows/.github/actions/add-npm-token@main
-
-    - name: Install dependencies
-      shell: bash
-      run: |
-        if [[ -n $NPM_TOKEN ]]; then echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc; fi
-        export HUSKY=0
-        npm config set audit=false fund=false
-        npm ci
+    - uses: cloudbeds/workflows/.github/actions/npm-install@main
 
     - name: Build
       shell: bash

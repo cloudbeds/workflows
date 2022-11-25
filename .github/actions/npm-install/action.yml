@@ -1,0 +1,25 @@
+name: Install NPM packages
+description: Adds NPM token and install node modules
+
+runs:
+  using: composite
+  steps:
+    - name: Initialize npm cache
+      uses: actions/setup-node@v3
+      with:
+        cache: npm
+
+    - name: Add NPM token to .npmrc
+      shell: bash
+      run:
+        if [[ -n $NPM_TOKEN && ! -f .npmrc ]];
+          then echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc;
+        fi
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        export HUSKY=0
+        npm config set audit=false fund=false
+        npm ci
+

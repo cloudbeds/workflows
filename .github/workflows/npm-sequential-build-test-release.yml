@@ -28,17 +28,7 @@ jobs:
         # https://github.com/actions/checkout v3.1.0
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
-      - name: Initialize npm cache
-        uses: actions/setup-node@v3
-        with:
-          cache: npm
-
-      - uses: cloudbeds/workflows/.github/actions/add-npm-token@main
-
-      - name: Install dependencies
-        run: |
-          npm config set audit=false fund=false
-          npm ci
+      - uses: cloudbeds/workflows/.github/actions/npm-install@main
 
       - name: Lint
         run: |
