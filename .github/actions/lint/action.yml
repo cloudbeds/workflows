@@ -1,27 +1,24 @@
 name: Code Lint
 description: Eslint code linter
 
+inputs:
+  install:
+    description: Name of the uploaded build artifact
+    required: true
+  artifactPath:
+    description: Destination path for the downloaded build artifact
+    default: dist
+    required: false
+  AWS_ARN:
+    description: AWS Amazon Resource Number
+    required: true
+  S3_URL:
+    description: URL to an S3 bucket folder
+    required: true
 runs:
   using: composite
   steps:
-    - name: Checkout
-      # https://github.com/actions/checkout v3.1.0
-      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
-
-    - name: Initialize npm cache
-      uses: actions/setup-node@v3
-      with:
-        cache: npm
-
-    - name: Install dependencies
-      shell: bash
-      run: |
-        export HUSKY=0
-        npm config set audit=false fund=false
-        npm ci
-
-    - name: Lint
-      shell: bash
+    - shell: bash
       run: |
         npm run lint --if-present
         npm run lint:ts --if-present

@@ -21,7 +21,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/lint@main
+      - uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -29,7 +29,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/test@main
+      - uses: cloudbeds/workflows/.github/actions/npm-install-test@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -37,7 +37,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudbeds/workflows/.github/actions/build@main
+      - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         with:
           artifactPath: ${{ inputs.artifactPath }}
         env:
