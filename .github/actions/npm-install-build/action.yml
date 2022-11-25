@@ -27,6 +27,8 @@ runs:
       with:
         cache: npm
 
+    - uses: cloudbeds/workflows/.github/actions/add-npm-token@main
+
     - name: Install dependencies
       shell: bash
       run: |

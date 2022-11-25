@@ -13,10 +13,11 @@ runs:
       with:
         cache: npm
 
+    - uses: cloudbeds/workflows/.github/actions/add-npm-token@main
+
     - name: Install dependencies
       shell: bash
       run: |
-        if [[ -n $NPM_TOKEN ]]; then echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc; fi
         export HUSKY=0
         npm config set audit=false fund=false
         npm ci
