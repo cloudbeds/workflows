@@ -30,7 +30,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        if [[ -n $NPM_TOKEN ]]; echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc; fi
+        if [[ -n $NPM_TOKEN ]]; then echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc; fi
         export HUSKY=0
         npm config set audit=false fund=false
         npm ci
