@@ -56,6 +56,7 @@ runs:
     - name: Create config file for Semantic Release
       shell: bash
       run: |
+        export HUSKY=0
         cat << EOF > .releaserc
         {
           "plugins": [
