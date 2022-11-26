@@ -53,6 +53,10 @@ runs:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
 
+    - name: Disable husky hooks in CI
+      shell: bash
+      run: npm set-script prepare ""
+
     - name: Create config file for Semantic Release
       shell: bash
       run: |
