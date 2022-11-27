@@ -41,7 +41,7 @@ on:
 
 jobs:
   build-and-test:
-    name: ${{ inputs.jobNameSuffix }}
+    name: ${{ inputs.jobName }}
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
