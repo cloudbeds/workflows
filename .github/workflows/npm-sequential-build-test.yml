@@ -74,7 +74,7 @@ jobs:
 
       - id: version-from-package-json
         # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
-        uses: martinbeentjes/npm-get-version-action@7aa1d82604bb2dbe377a64ca35e692e6fe333c9c
+        uses: martinbeentjes/npm-get-version-action@f9202ed69764f06546b2313b263136639df8e51e
 
       - name: Writing build info
         run: |
