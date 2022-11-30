@@ -8,7 +8,7 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
-      GH_TOKEN:
+      CB_CI_WORKFLOW_TOKEN:
         required: true
     inputs:
       artifactPath:
@@ -58,5 +58,5 @@ jobs:
           artifactName: build-artifact
           artifactPath: ${{ inputs.artifactPath }}
           publishToNpm: true
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

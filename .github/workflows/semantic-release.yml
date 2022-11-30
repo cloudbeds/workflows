@@ -12,7 +12,7 @@ on:
         required: false
         type: string
     secrets:
-      GH_TOKEN:
+      CB_CI_WORKFLOW_TOKEN:
         required: true
 
 jobs:
@@ -26,4 +26,4 @@ jobs:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}
           withoutBuiltArtifact: ${{ !inputs.artifactName && 'true' }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
