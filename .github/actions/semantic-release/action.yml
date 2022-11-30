@@ -55,12 +55,11 @@ runs:
 
     - name: Disable husky hooks in CI
       shell: bash
-      run: npm set-script prepare ""
+      run: export HUSKY=0
 
     - name: Create config file for Semantic Release
       shell: bash
       run: |
-        export HUSKY=0
         cat << EOF > .releaserc
         {
           "plugins": [
