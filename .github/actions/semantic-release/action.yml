@@ -55,7 +55,9 @@ runs:
 
     - name: Disable husky hooks in CI
       shell: bash
-      run: export HUSKY=0
+      run: |
+        export HUSKY=0
+        export HUSKY_SKIP_INSTALL=1
 
     - name: Create config file for Semantic Release
       shell: bash
@@ -88,6 +90,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
         HUSKY: '0'
+        HUSKY_SKIP_INSTALL: '1'
 
     - name: Output commit hash
       id: released-sha
