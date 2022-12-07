@@ -51,18 +51,16 @@ runs:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.GITHUB_TOKEN }}
 
+    # install node_modules since there might be a dependency from husky which is invoked during npm publish
+    - if: inputs.publishToNpm == 'true'
+      uses: cloudbeds/workflows/.github/actions/npm-install@main
+
     - if: inputs.withoutBuiltArtifact != 'true'
       name: Download artifact
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
-
-    - name: Disable husky hooks in CI
-      shell: bash
-      run: |
-        export HUSKY=0
-        export HUSKY_SKIP_INSTALL=1
 
     - name: Create config file for Semantic Release
       shell: bash
@@ -95,7 +93,6 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
         HUSKY: '0'
-        HUSKY_SKIP_INSTALL: '1'
 
     - name: Output commit hash
       id: released-sha
