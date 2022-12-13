@@ -63,13 +63,17 @@ runs:
         path: ${{ inputs.artifactPath }}
 
     - shell: bash
-      name: List root directory content
-      run: ls -la
+      run: |
+        echo "::group::Contents of the Root directory"
+        ls -la
+        echo "::endgroup::"
 
     - if: inputs.withoutBuiltArtifact != 'true'
       shell: bash
-      name: List "${{ inputs.artifactPath }}" directory content
-      run: ls -la ${{ inputs.artifactPath }}
+      run: |
+        echo "::group::Contents of the '${{ inputs.artifactPath }}' directory"
+        ls -la ${{ inputs.artifactPath }}
+        echo "::endgroup::"
 
     - name: Create config file for Semantic Release
       shell: bash

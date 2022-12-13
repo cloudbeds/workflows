@@ -12,8 +12,8 @@ on:
     inputs:
       artifactPath:
         description: Destination path for the downloaded build artifact
-        default: dist
         required: false
+        default: dist
         type: string
 
 jobs:

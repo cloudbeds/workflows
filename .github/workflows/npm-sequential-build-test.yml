@@ -11,28 +11,28 @@ on:
     inputs:
       artifactName:
         description: Name of the build artifact
-        default: build-artifact
         required: false
+        default: build-artifact
         type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
-        default: dist
         required: false
+        default: dist
         type: string
       jobName:
         description: Custom job name
-        default: Build, Lint, Test
         required: false
+        default: Build, Lint, Test
         type: string
       ref:
         description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
-        default: ''
         required: false
+        default: ''
         type: string
       envVars:
         description: List of environment variables to set up, given in VAR=value format.
-        default: ''
         required: false
+        default: ''
         type: string
     outputs:
       appVersion:

@@ -10,6 +10,7 @@ on:
       artifactPath:
         description: Destination path for the downloaded build artifact
         required: false
+        default: dist
         type: string
     secrets:
       NPM_TOKEN:
