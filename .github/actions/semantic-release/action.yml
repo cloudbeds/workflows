@@ -64,9 +64,11 @@ runs:
 
     - shell: bash
       run: |
+        echo ""
         echo "::group::Contents of the Root directory"
         ls -la
         echo "::endgroup::"
+        echo ""
 
     - if: inputs.withoutBuiltArtifact != 'true'
       shell: bash
@@ -74,6 +76,7 @@ runs:
         echo "::group::Contents of the '${{ inputs.artifactPath }}' directory"
         ls -la ${{ inputs.artifactPath }}
         echo "::endgroup::"
+        echo ""
 
     - name: Create config file for Semantic Release
       shell: bash
@@ -111,6 +114,7 @@ runs:
       id: released-sha
       shell: bash
       run: |
+        echo ""
         if [[ ${{ steps.semantic-release.outputs.new_release_published }} == true ]]; then
           echo "::notice::Application version was updated to ${{ steps.semantic-release.outputs.new_release_version }}"
         else
