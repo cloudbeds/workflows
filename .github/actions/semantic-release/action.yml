@@ -62,6 +62,15 @@ runs:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
 
+    - shell: bash
+      name: List root directory content
+      run: ls -la
+
+    - if: inputs.withoutBuiltArtifact != 'true'
+      shell: bash
+      name: List "${{ inputs.artifactPath }}" directory content
+      run: ls -la ${{ inputs.artifactPath }}
+
     - name: Create config file for Semantic Release
       shell: bash
       run: |
