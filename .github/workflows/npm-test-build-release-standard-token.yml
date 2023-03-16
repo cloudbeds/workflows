@@ -1,0 +1,56 @@
+# Generic workflow to lint, test, build and publish an npm package
+
+name: Test, Build and Publish npm package
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+    inputs:
+      artifactPath:
+        description: Destination path for the downloaded build artifact
+        required: false
+        default: dist
+        type: string
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cloudbeds/workflows/.github/actions/npm-install-test@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
+        with:
+          artifactPath: ${{ inputs.artifactPath }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release:
+    name: Publish to NPM 🚀
+    runs-on: ubuntu-latest
+    needs: [lint, test, build]
+    permissions: write-all
+    steps:
+      - name: Semantic Release
+        uses: cloudbeds/workflows/.github/actions/semantic-release@main
+        with:
+          artifactPath: ${{ inputs.artifactPath }}
+          publishToNpm: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
