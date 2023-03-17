@@ -8,7 +8,7 @@ on:
       NPM_TOKEN:
         required: true
       CB_CI_WORKFLOW_TOKEN:
-        required: true
+        required: false
     inputs:
       artifactPath:
         description: Destination path for the downloaded build artifact
@@ -47,11 +47,13 @@ jobs:
     name: Publish to NPM 🚀
     runs-on: ubuntu-latest
     needs: [lint, test, build]
+    permissions:
+      contents: write
     steps:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
           artifactPath: ${{ inputs.artifactPath }}
           publishToNpm: true
-          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
