@@ -7,6 +7,7 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
+      # deprecated, replaced by permissions, must be removed after updating workflows that depended on this
       CB_CI_WORKFLOW_TOKEN:
         required: false
     inputs:
