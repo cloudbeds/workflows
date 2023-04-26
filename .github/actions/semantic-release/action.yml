@@ -87,10 +87,10 @@ runs:
     - name: Create config file for Semantic Release
       shell: bash
       run: |
-        if [[ '${{inputs.withoutChangelog}}' == 'true' ]]; then
+        if [[ '${{inputs.withoutChangelog}}' != 'true' ]]; then
           CHANGELOG_PLUGIN='"@semantic-release/changelog",'
         fi
-        if [[ '${{inputs.withoutNpmPlugin}}' == 'true' ]]; then
+        if [[ '${{inputs.withoutNpmPlugin}}' != 'true' ]]; then
           NPM_PLUGIN='"@semantic-release/npm", {
             "npmPublish": ${{inputs.publishToNpm == 'true'}},
           },'
