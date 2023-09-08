@@ -69,8 +69,30 @@ jobs:
           npm run lint --if-present
           npm run lint:ts --if-present
 
+      # Runs tests with coverage when available, otherwise just runs tests
       - name: Test
-        run: npm test --if-present
+        id: test
+        run: |
+          if [[ $(jq '.scripts["test:coverage"]' < package.json;) != null ]]; then
+            npm run test:coverage
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          else
+            npm run test --if-present
+          fi
+
+      - name: Find Current Pull Request
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        id: findPr
+        uses: jwalton/gh-find-current-pr@v1.3.2
+
+      - name: Report Test Coverage
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        uses: ArtiomTr/jest-coverage-report-action@v2.2.4
+        with:
+          prnumber: ${{ steps.findPr.outputs.number }}
+          annotations: coverage
+          coverage-file: report.json
+          base-coverage-file: report.json
 
       - id: version-from-package-json
         # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
