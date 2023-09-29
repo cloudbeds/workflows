@@ -74,6 +74,7 @@ runs:
         echo "::group::📂 Contents of the Root directory"
         ls -la
         echo "::endgroup::"
+        echo ""
 
     - if: inputs.withoutBuiltArtifact != 'true'
       shell: bash
@@ -82,6 +83,7 @@ runs:
         echo "::group::📂 Contents of the '${{ inputs.artifactPath }}' directory"
         ls -la ${{ inputs.artifactPath }}
         echo "::endgroup::"
+        echo ""
 
     - name: Create config file for Semantic Release
       shell: bash
@@ -110,8 +112,9 @@ runs:
         EOF
         
         echo "::group::📂 Contents of .releaserc"
-        jq '.' .releaserc
+        cat .releaserc
         echo "::endgroup::"
+        echo ""
 
     - name: Semantic Release
       # https://github.com/cycjimmy/semantic-release-action v3.4.2
