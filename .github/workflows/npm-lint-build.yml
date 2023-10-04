@@ -5,6 +5,16 @@ name: Lint and Build
 
 on:
   workflow_call:
+    inputs:
+      artifactName:
+        description: Name of the uploaded build artifact
+        required: false
+        type: string
+      artifactPath:
+        description: Destination path for the downloaded build artifact
+        required: false
+        default: dist
+        type: string
     secrets:
       NPM_TOKEN:
         required: true
@@ -25,5 +35,9 @@ jobs:
     steps:
       - name: Build
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
+        with:
+          artifactName: ${{ inputs.artifactName }}
+          artifactPath: ${{ inputs.artifactPath }}
+          withoutBuiltArtifact: ${{ !inputs.artifactName && 'true' }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

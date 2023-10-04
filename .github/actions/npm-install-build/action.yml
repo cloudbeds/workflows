@@ -14,6 +14,9 @@ inputs:
     description: Custom build script name
     default: build
     required: false
+  withoutBuiltArtifact:
+    description: Skip uploading the build artifact
+    required: false
 
 runs:
   using: composite
@@ -29,6 +32,7 @@ runs:
       run: npm run ${{ inputs.npmScript }}
 
     - uses: actions/upload-artifact@v3
+      if: inputs.withoutBuiltArtifact != 'true'
       with:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
