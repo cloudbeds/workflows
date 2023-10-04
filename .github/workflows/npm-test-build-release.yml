@@ -56,5 +56,5 @@ jobs:
         with:
           artifactPath: ${{ inputs.artifactPath }}
           publishToNpm: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
