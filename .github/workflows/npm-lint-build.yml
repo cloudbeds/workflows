@@ -1,0 +1,29 @@
+# Generic workflow for a push event
+# It should be used for all branches except `main` which should use the `*-release` workflow
+
+name: Lint and Build
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint
+        uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: cloudbeds/workflows/.github/actions/npm-install-build@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
