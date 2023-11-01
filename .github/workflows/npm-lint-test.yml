@@ -1,0 +1,28 @@
+# Generic workflow for a push or pull_request event
+
+name: Lint and Test
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint
+        uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test
+        uses: cloudbeds/workflows/.github/actions/npm-install-test@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
