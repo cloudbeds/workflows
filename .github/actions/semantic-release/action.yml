@@ -140,7 +140,7 @@ runs:
       run: |
         echo ""
         if [[ ${{ steps.semantic-release.outputs.new_release_published }} == true ]]; then
-          echo "::notice::Application version was updated to ${{ steps.semantic-release.outputs.new_release_version }}"
+          echo "::notice::🎉 Application version was updated to ${{ steps.semantic-release.outputs.new_release_version }}"
         else
           echo "::warning::No new version is released"
           echo "::warning::Make sure that commit messages follow the semantic-release format"
