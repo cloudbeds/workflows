@@ -6,4 +6,4 @@ runs:
   steps:
     - name: Test
       shell: bash
-      run: npm test
+      run: npm test --if-present

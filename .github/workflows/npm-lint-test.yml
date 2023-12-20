@@ -22,7 +22,30 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - uses: cloudbeds/workflows/.github/actions/npm-install@main
+
       - name: Test
-        uses: cloudbeds/workflows/.github/actions/npm-install-test@main
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        id: test
+        run: |
+          if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
+            npm run test:coverage:ci
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          else
+            npm run test --if-present
+          fi
+
+      - name: Find Current Pull Request
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        id: findPr
+        uses: jwalton/gh-find-current-pr@v1.3.2
+
+      - name: Report Test Coverage
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        uses: ArtiomTr/jest-coverage-report-action@v2.2.4
+        with:
+          prnumber: ${{ steps.findPr.outputs.number }}
+          annotations: coverage
+          coverage-file: report.json
+          base-coverage-file: report.json
+
