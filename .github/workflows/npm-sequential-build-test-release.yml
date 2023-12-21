@@ -20,7 +20,7 @@ on:
 jobs:
   test-and-build:
     name: Lint, Build, Test
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
@@ -49,7 +49,7 @@ jobs:
 
   release:
     name: Publish to NPM 🚀
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     needs: test-and-build
     steps:
       - name: Semantic Release

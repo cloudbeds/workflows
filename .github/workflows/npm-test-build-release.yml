@@ -20,7 +20,7 @@ on:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
@@ -28,7 +28,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-test@main
         env:
@@ -36,7 +36,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         with:
@@ -46,7 +46,7 @@ jobs:
 
   release:
     name: Publish to NPM 🚀
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     needs: [lint, test, build]
     permissions:
       contents: write
