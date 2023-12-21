@@ -42,7 +42,7 @@ on:
 jobs:
   build-and-test:
     name: ${{ inputs.jobName }}
-    runs-on: x2-4core
+    runs-on: x8-core
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     outputs:

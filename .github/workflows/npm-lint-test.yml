@@ -20,7 +20,7 @@ jobs:
 
   build:
     name: Test
-    runs-on: x2-4core
+    runs-on: x8-core
     steps:
       - uses: actions/checkout@v3
       - uses: cloudbeds/workflows/.github/actions/npm-install@main
