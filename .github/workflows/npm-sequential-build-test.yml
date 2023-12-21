@@ -73,7 +73,10 @@ jobs:
       - name: Test
         id: test
         run: |
-          if [[ $(jq '.scripts["test:coverage"]' < package.json;) != null ]]; then
+          if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
+            npm run test:coverage:ci
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          elif [[ $(jq '.scripts["test:coverage"]' < package.json;) != null ]]; then
             npm run test:coverage
             echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
           else
