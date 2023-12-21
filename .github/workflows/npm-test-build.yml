@@ -12,7 +12,7 @@ on:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - name: Lint
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
@@ -21,7 +21,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - name: Test
         uses: cloudbeds/workflows/.github/actions/npm-install-test@main
@@ -30,7 +30,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: x2-4core
     steps:
       - name: Build
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
