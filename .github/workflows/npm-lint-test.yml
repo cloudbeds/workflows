@@ -8,7 +8,7 @@ on:
       NPM_TOKEN:
         required: true
     inputs:
-      runner:
+      runnerForTest:
         description: The type of runner to use
         required: false
         default: x8-core
@@ -26,7 +26,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ inputs.runnerForTest }}
     steps:
       - uses: actions/checkout@v3
       - uses: cloudbeds/workflows/.github/actions/npm-install@main

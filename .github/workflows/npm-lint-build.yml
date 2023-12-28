@@ -6,7 +6,7 @@ name: Lint and Build
 on:
   workflow_call:
     inputs:
-      runner:
+      runnerForBuild:
         description: The type of runner to use
         required: false
         default: x8-core
@@ -36,7 +36,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ${{ inputs.runner }}
+    runs-on: ${{ inputs.runnerForBuild }}
     steps:
       - name: Build
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
