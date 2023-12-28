@@ -8,8 +8,8 @@ on:
       NPM_TOKEN:
         required: true
     inputs:
-      runnerForTest:
-        description: The type of runner to use
+      runner:
+        description: The type of runner to use for test job
         required: false
         default: ubuntu-latest
         type: string
@@ -26,7 +26,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ${{ inputs.runnerForTest }}
+    runs-on: ${{ inputs.runner }}
     steps:
       - uses: actions/checkout@v3
       - uses: cloudbeds/workflows/.github/actions/npm-install@main
