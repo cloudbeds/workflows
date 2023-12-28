@@ -11,6 +11,11 @@ on:
       CB_CI_WORKFLOW_TOKEN:
         required: true
     inputs:
+      runner:
+        description: The type of runner to use
+        required: false
+        default: x8-core
+        type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
         required: false
@@ -20,7 +25,7 @@ on:
 jobs:
   test-and-build:
     name: Lint, Build, Test
-    runs-on: x8-core
+    runs-on: ${{ inputs.runner }}
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
