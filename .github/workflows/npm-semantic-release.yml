@@ -21,7 +21,7 @@ on:
 jobs:
   release:
     name: Publish to NPM 🚀
-    runs-on: x2-4core
+    runs-on: ubuntu-latest
     steps:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main

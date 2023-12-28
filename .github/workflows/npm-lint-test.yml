@@ -11,13 +11,13 @@ on:
       runnerForTest:
         description: The type of runner to use
         required: false
-        default: x8-core
+        default: ubuntu-latest
         type: string
 
 jobs:
   lint:
     name: Lint
-    runs-on: x2-4core
+    runs-on: ubuntu-latest
     steps:
       - name: Lint
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main

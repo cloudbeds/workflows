@@ -14,12 +14,12 @@ on:
       runnerForBuild:
         description: The type of runner to use for build job
         required: false
-        default: x8-core
+        default: ubuntu-latest
         type: string
       runnerForTest:
         description: The type of runner to use for test job
         required: false
-        default: x8-core
+        default: ubuntu-latest
         type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
@@ -30,7 +30,7 @@ on:
 jobs:
   lint:
     name: Lint
-    runs-on: x2-4core
+    runs-on: ubuntu-latest
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
@@ -56,7 +56,7 @@ jobs:
 
   release:
     name: Publish to NPM 🚀
-    runs-on: x2-4core
+    runs-on: ubuntu-latest
     needs: [lint, test, build]
     permissions:
       contents: write
