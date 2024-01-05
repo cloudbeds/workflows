@@ -51,7 +51,7 @@ jobs:
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     outputs:
-      appVersion: ${{ steps.version-from-package-json.outputs.current-version }}
+      appVersion: ${{ steps.version-from-package-json.outputs.VERSION }}
     steps:
       - # https://github.com/actions/checkout v3.1.0
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
@@ -103,8 +103,11 @@ jobs:
           base-coverage-file: report.json
 
       - id: version-from-package-json
-        # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
-        uses: martinbeentjes/npm-get-version-action@f9202ed69764f06546b2313b263136639df8e51e
+        shell: bash
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Writing build info
         run: |
@@ -113,7 +116,7 @@ jobs:
           echo "{
             \"sha\": \"$SHA\",
             \"shaShort\": \"$SHA_SHORT\",
-            \"version\": \"${{ steps.version-from-package-json.outputs.current-version }}\",
+            \"version\": \"$VERSION\",
             \"viewAction\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",
             \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
             \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",

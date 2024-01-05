@@ -10,7 +10,7 @@ inputs:
 outputs:
   appVersion:
     description: App version
-    value: ${{ steps.package-json-version.outputs.current-version }}
+    value: ${{ steps.package-json-version.outputs.VERSION }}
 
 runs:
   using: composite
@@ -23,5 +23,7 @@ runs:
 
     - name: Get Version from package.json
       id: package-json-version
-      # https://github.com/martinbeentjes/npm-get-version-action v1.2.3
-      uses: martinbeentjes/npm-get-version-action@f9202ed69764f06546b2313b263136639df8e51e
+      shell: bash
+      run: |
+        VERSION=$(jq -r '.version' package.json)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
