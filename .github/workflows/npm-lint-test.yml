@@ -54,4 +54,3 @@ jobs:
           annotations: coverage
           coverage-file: report.json
           base-coverage-file: report.json
-

@@ -51,6 +51,7 @@ jobs:
       - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         with:
           artifactPath: ${{ inputs.artifactPath }}
+          withoutCoverage: true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 

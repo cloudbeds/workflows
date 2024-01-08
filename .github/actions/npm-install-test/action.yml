@@ -6,6 +6,9 @@ inputs:
     description: List of environment variables to set up, given in VAR=value format.
     required: false
     default: ''
+  withoutCoverage:
+    description: Do not run coverage report
+    required: false
 
 runs:
   using: composite
@@ -24,7 +27,7 @@ runs:
         done
 
         npm run download-types --if-present
-        if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
+        if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
           npm run test:coverage:ci
           echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
         else

@@ -44,6 +44,20 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Find Current Pull Request
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        id: findPr
+        uses: jwalton/gh-find-current-pr@v1.3.2
+
+      - name: Report Test Coverage
+        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        uses: ArtiomTr/jest-coverage-report-action@v2.2.4
+        with:
+          prnumber: ${{ steps.findPr.outputs.number }}
+          annotations: coverage
+          coverage-file: report.json
+          base-coverage-file: report.json
+
   build:
     name: Build
     runs-on: ${{ inputs.runnerForBuild }}
