@@ -1,6 +1,12 @@
 name: NPM Install and Test
 description: Action to run the full suite of tests
 
+inputs:
+  envVars:
+    description: List of environment variables to set up, given in VAR=value format.
+    required: false
+    default: ''
+
 runs:
   using: composite
   steps:
@@ -12,4 +18,10 @@ runs:
 
     - name: Test
       shell: bash
-      run: npm test --if-present
+      run: |
+        for envVar in "${{ inputs.envVars }}"; do
+          if [[ -n "$envVar" ]]; then export $envVar; fi
+        done
+
+        npm run download-types --if-present
+        npm test --if-present

@@ -19,6 +19,11 @@ on:
         required: false
         default: ubuntu-latest
         type: string
+      envVars:
+        description: List of environment variables to set up, given in VAR=value format.
+        required: false
+        default: ''
+        type: string
 
 jobs:
   lint:

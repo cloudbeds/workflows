@@ -17,6 +17,10 @@ inputs:
   withoutBuiltArtifact:
     description: Skip uploading the build artifact
     required: false
+  envVars:
+    description: List of environment variables to set up, given in VAR=value format.
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -29,7 +33,12 @@ runs:
 
     - name: Build
       shell: bash
-      run: npm run ${{ inputs.npmScript }}
+      run: |
+        for envVar in "${{ inputs.envVars }}"; do
+          if [[ -n "$envVar" ]]; then export $envVar; fi
+        done
+
+        npm run ${{ inputs.npmScript }}
 
     - uses: actions/upload-artifact@v3
       if: inputs.withoutBuiltArtifact != 'true'

@@ -1,6 +1,12 @@
 name: NPM Install and Code Lint
 description: Eslint code linter
 
+inputs:
+  envVars:
+    description: List of environment variables to set up, given in VAR=value format.
+    required: false
+    default: ''
+
 runs:
   using: composite
   steps:
@@ -13,5 +19,10 @@ runs:
     - name: Lint
       shell: bash
       run: |
+        for envVar in "${{ inputs.envVars }}"; do
+          if [[ -n "$envVar" ]]; then export $envVar; fi
+        done
+
+        npm run download-types --if-present
         npm run lint --if-present
         npm run lint:ts --if-present
