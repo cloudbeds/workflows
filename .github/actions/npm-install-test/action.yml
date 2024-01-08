@@ -24,4 +24,9 @@ runs:
         done
 
         npm run download-types --if-present
-        npm test --if-present
+        if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
+          npm run test:coverage:ci
+          echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+        else
+          npm run test --if-present
+        fi

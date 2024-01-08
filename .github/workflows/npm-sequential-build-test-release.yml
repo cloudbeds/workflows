@@ -44,7 +44,13 @@ jobs:
         run: npm run build --if-present
 
       - name: Test
-        run: npm test --if-present
+        run: |
+          if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
+            npm run test:coverage:ci
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          else
+            npm run test --if-present
+          fi
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
