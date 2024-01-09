@@ -98,7 +98,6 @@ jobs:
         if: inputs.writeBuildInfo == 'true'
         with:
           artifactPath: ${{ inputs.artifactPath }}
-          version: ${{ env.VERSION }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
