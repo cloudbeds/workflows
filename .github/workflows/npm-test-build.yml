@@ -24,6 +24,15 @@ on:
         required: false
         default: dist
         type: string
+      jobName:
+        description: Not Used (added during migration from npm-sequential-build-test)
+        required: false
+        type: string
+      ref:
+        description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
+        required: false
+        default: ''
+        type: string
       envVars:
         description: List of environment variables to set up, given in VAR=value format.
         required: false
@@ -49,6 +58,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          ref: ${{ inputs.ref }}
 
   test:
     name: Test
@@ -58,6 +68,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-test@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          ref: ${{ inputs.ref }}
 
       - name: Find Current Pull Request
         if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
@@ -81,6 +92,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          ref: ${{ inputs.ref }}
 
       - uses: cloudbeds/workflows/.github/actions/write-build-info@main
         if: inputs.writeBuildInfo == 'true'

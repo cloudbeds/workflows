@@ -9,6 +9,10 @@ inputs:
   withoutCoverage:
     description: Do not run coverage report
     required: false
+  ref:
+    description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
+    required: false
+    default: ''
 
 runs:
   using: composite

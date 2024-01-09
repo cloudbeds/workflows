@@ -6,6 +6,10 @@ inputs:
     description: List of environment variables to set up, given in VAR=value format.
     required: false
     default: ''
+  ref:
+    description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
+    required: false
+    default: ''
 
 runs:
   using: composite
