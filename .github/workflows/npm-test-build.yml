@@ -83,7 +83,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - uses: cloudbeds/workflows/.github/actions/write-build-info@main
-        if: writeBuildInfo == 'true'
+        if: inputs.writeBuildInfo == 'true'
         with:
           artifactPath: ${{ inputs.artifactPath }}
           version: ${{ env.VERSION }}
