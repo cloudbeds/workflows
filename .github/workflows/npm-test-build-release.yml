@@ -11,13 +11,8 @@ on:
       CB_CI_WORKFLOW_TOKEN:
         required: false
     inputs:
-      runnerForBuild:
-        description: The type of runner to use for build job
-        required: false
-        default: ubuntu-latest
-        type: string
-      runnerForTest:
-        description: The type of runner to use for test job
+      runner:
+        description: The type of runner to use for build and test jobs
         required: false
         default: ubuntu-latest
         type: string
@@ -38,7 +33,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ${{ inputs.runnerForTest }}
+    runs-on: ${{ inputs.runner }}
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-test@main
         env:
@@ -46,7 +41,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: ${{ inputs.runnerForBuild }}
+    runs-on: ${{ inputs.runner }}
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         with:

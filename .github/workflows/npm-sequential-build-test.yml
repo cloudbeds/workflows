@@ -39,6 +39,16 @@ on:
         required: false
         default: ''
         type: string
+      testCoverageAnnotations:
+        description: Annotation type for test coverage should be 'all', 'none', 'coverage' or 'failed-tests'
+        required: false
+        default: coverage
+        type: string
+      writeBuildInfo:
+        description: Whether to write build info to a file
+        required: false
+        default: true
+        type: string
     outputs:
       appVersion:
         description: App version from package.json
@@ -98,7 +108,7 @@ jobs:
         uses: ArtiomTr/jest-coverage-report-action@v2.2.4
         with:
           prnumber: ${{ steps.findPr.outputs.number }}
-          annotations: coverage
+          annotations: ${{ inputs.testCoverageAnnotations }}
           coverage-file: report.json
           base-coverage-file: report.json
 
@@ -106,23 +116,12 @@ jobs:
         shell: bash
         run: |
           VERSION=$(jq -r '.version' package.json)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Writing build info
-        run: |
-          SHA=$(git rev-parse HEAD)
-          SHA_SHORT=$(git rev-parse --short HEAD)
-          echo "{
-            \"sha\": \"$SHA\",
-            \"shaShort\": \"$SHA_SHORT\",
-            \"version\": \"$VERSION\",
-            \"viewAction\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",
-            \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
-            \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",
-            \"viewLastCommit\": \"https://github.com/${{ github.repository }}/commit/$SHA\"
-          }" > ${{ inputs.artifactPath }}/build-info.json
-          cat ${{ inputs.artifactPath }}/build-info.json
+      - uses: cloudbeds/workflows/.github/actions/write-build-info@main
+        if: writeBuildInfo == 'true'
+        with:
+          artifactPath: ${{ inputs.artifactPath }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3

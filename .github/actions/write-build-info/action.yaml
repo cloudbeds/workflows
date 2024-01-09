@@ -1,0 +1,30 @@
+name: Write build info
+description: Writes build info to build-info.json
+
+inputs:
+  artifactPath:
+    description: Destination path for the downloaded build artifact
+    required: false
+    default: dist
+
+runs:
+  using: composite
+  steps:
+    - name: Write build info to build-info.json
+      shell: bash
+      run: |
+        SHA=$(git rev-parse HEAD)
+        SHA_SHORT=$(git rev-parse --short HEAD)
+        VERSION=$(jq -r '.version' package.json)
+
+        echo "{
+          \"sha\": \"$SHA\",
+          \"shaShort\": \"$SHA_SHORT\",
+          \"version\": \"$VERSION\",
+          \"viewAction\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",
+          \"viewRepo\": \"https://github.com/${{ github.repository }}/tree/$SHA\",
+          \"viewCommitHistory\": \"https://github.com/${{ github.repository }}/commits/$SHA\",
+          \"viewLastCommit\": \"https://github.com/${{ github.repository }}/commit/$SHA\"
+        }" > ${{ inputs.artifactPath }}/build-info.json
+
+        cat ${{ inputs.artifactPath }}/build-info.json
