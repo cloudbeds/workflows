@@ -1,8 +1,6 @@
 # Generic workflow for a push event
 # It should be used for all branches except `main` which should use the `*-release` workflow
 
-# DEPRECATED, use npm-build-test.yml instead
-
 name: Lint, Test and Build
 
 on:

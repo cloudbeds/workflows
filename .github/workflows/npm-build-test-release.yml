@@ -1,7 +1,5 @@
 # Generic workflow to lint, test, build and publish an npm package
 
-# DEPRECATED, use npm-build-test.yml instead
-
 name: Test, Build and Publish npm package
 
 on:
