@@ -33,6 +33,9 @@ runs:
         done
 
         npm run download-types --if-present
+        # deprecated
+        npm run downloadTypes --if-present
+
         if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
           npm run test:coverage:ci
           echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
