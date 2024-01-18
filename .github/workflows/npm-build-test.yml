@@ -64,6 +64,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
           envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
@@ -77,6 +78,7 @@ jobs:
         id: test
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
           envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
@@ -102,6 +104,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
           envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
