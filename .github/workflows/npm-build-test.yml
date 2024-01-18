@@ -64,6 +64,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
   test:
@@ -73,17 +74,19 @@ jobs:
     steps:
       - name: Test
         uses: cloudbeds/workflows/.github/actions/npm-install-test@main
+        id: test
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
       - name: Find Current Pull Request
-        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        if: steps.test.outputs.hasCoverageReport == 'true'
         id: findPr
         uses: jwalton/gh-find-current-pr@v1.3.2
 
       - name: Report Test Coverage
-        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        if: steps.test.outputs.hasCoverageReport == 'true'
         uses: ArtiomTr/jest-coverage-report-action@v2.2.4
         with:
           prnumber: ${{ steps.findPr.outputs.number }}
@@ -99,6 +102,7 @@ jobs:
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
 
       - uses: cloudbeds/workflows/.github/actions/write-build-info@main
