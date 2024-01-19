@@ -54,6 +54,11 @@ on:
         default: false
         type: string
 
+    outputs:
+      appVersion:
+        description: App version from package.json
+        value: ${{ jobs.build.outputs.appVersion }}
+
 jobs:
   lint:
     name: Lint
@@ -99,6 +104,8 @@ jobs:
   build:
     name: Build
     runs-on: ${{ inputs.runner }}
+    outputs:
+      appVersion: ${{ steps.version-from-package-json.outputs.VERSION }}
     steps:
       - name: Build
         uses: cloudbeds/workflows/.github/actions/npm-install-build@main
@@ -107,6 +114,12 @@ jobs:
         with:
           envVars: ${{ inputs.envVars }}
           ref: ${{ inputs.ref }}
+
+      - id: version-from-package-json
+        shell: bash
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - uses: cloudbeds/workflows/.github/actions/write-build-info@main
         if: inputs.writeBuildInfo == 'true'

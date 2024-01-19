@@ -54,6 +54,7 @@ on:
         required: false
         default: false
         type: string
+
     outputs:
       appVersion:
         description: App version from package.json
