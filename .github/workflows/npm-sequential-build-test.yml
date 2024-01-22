@@ -64,6 +64,7 @@ jobs:
   build-and-test:
     name: ${{ inputs.jobName }}
     runs-on: ${{ inputs.runner }}
+    timeout-minutes: 30
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     outputs:

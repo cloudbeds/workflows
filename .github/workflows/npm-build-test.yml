@@ -64,6 +64,7 @@ jobs:
     name: Lint
     if: inputs.buildOnly != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Lint
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
@@ -77,6 +78,7 @@ jobs:
     name: Test
     if: inputs.buildOnly != 'true'
     runs-on: ${{ inputs.runner }}
+    timeout-minutes: 15
     steps:
       - name: Test
         uses: cloudbeds/workflows/.github/actions/npm-install-test@main
@@ -104,6 +106,7 @@ jobs:
   build:
     name: Build
     runs-on: ${{ inputs.runner }}
+    timeout-minutes: 15
     outputs:
       appVersion: ${{ steps.version-from-package-json.outputs.VERSION }}
     steps:
