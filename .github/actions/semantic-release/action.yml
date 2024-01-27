@@ -101,17 +101,24 @@ runs:
         cat << EOF > .releaserc
         {
           "plugins": [
-            "@semantic-release/commit-analyzer", {
+            ["@semantic-release/commit-analyzer", {
               "releaseRules": [
                 {"type": "perf", "release": "patch"},
                 {"type": "refactor", "release": "patch"},
                 {"type": "revert", "release": "patch"}
               ] 
-            },
+            }],
             "@semantic-release/release-notes-generator",
             $CHANGELOG_PLUGIN
             $NPM_PLUGIN
-            "@semantic-release/github",
+            ["@semantic-release/github", {
+              "assets": [
+                {
+                  "path": "${{ inputs.artifactPath }}",
+                  "label": "Distribution"
+                }
+              ]
+            }],
             "@semantic-release/git"
           ]
         }
