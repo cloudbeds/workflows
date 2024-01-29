@@ -114,7 +114,7 @@ runs:
             ["@semantic-release/github", {
               "assets": [
                 {
-                  "path": "${{ inputs.artifactPath }}",
+                  "path": "${{ inputs.artifactPath }}/**/*",
                   "label": "Distribution"
                 }
               ]
