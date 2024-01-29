@@ -111,14 +111,7 @@ runs:
             "@semantic-release/release-notes-generator",
             $CHANGELOG_PLUGIN
             $NPM_PLUGIN
-            ["@semantic-release/github", {
-              "assets": [
-                {
-                  "path": "${{ inputs.artifactPath }}/**/*",
-                  "label": "Distribution"
-                }
-              ]
-            }],
+            "@semantic-release/github",
             "@semantic-release/git"
           ]
         }
