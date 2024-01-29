@@ -26,4 +26,4 @@ jobs:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}
           withoutBuiltArtifact: ${{ !inputs.artifactName && 'true' }}
-          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN || secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN || secrets.GITHUB_TOKEN }}
