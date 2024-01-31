@@ -4,7 +4,15 @@ description: Adds NPM token and install node modules
 runs:
   using: composite
   steps:
-    - name: Initialize npm cache
+    - name: NPM cache fetch
+      uses: actions/cache/restore@v4
+      id: npm-cache
+      with:
+        path: |
+          node_modules
+        key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
+
+    - name: Initialize npm cache for global packages
       # https://github.com/actions/setup-node
       uses: actions/setup-node@v4
       with:
@@ -24,3 +32,10 @@ runs:
         npm config set audit=false fund=false
         npm ci
 
+    - name: NPM cache push
+      uses: actions/cache/save@v4
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      with:
+        path: |
+          node_modules
+        key: ${{ steps.npm-cache.outputs.cache-primary-key }}
