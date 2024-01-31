@@ -5,7 +5,8 @@ runs:
   using: composite
   steps:
     - name: Initialize npm cache
-      uses: actions/setup-node@v3
+      # https://github.com/actions/setup-node
+      uses: actions/setup-node@v4
       with:
         cache: npm
 
