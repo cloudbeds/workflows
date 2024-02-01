@@ -28,9 +28,12 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
+        set -x
         export HUSKY=0
         npm config set audit=false fund=false
-        npm ci
+        du -sh node_modules || true
+        time npm ci
+        du -sh node_modules || true
 
     - name: NPM cache push
       uses: actions/cache/save@v4
