@@ -11,6 +11,7 @@ runs:
   using: composite
   steps:
     - name: NPM cache fetch
+      if: inputs.useNpmCI == 'false'
       uses: actions/cache/restore@v4
       id: npm-cache
       with:
@@ -45,7 +46,7 @@ runs:
 
     - name: NPM cache push
       uses: actions/cache/save@v4
-      if: steps.npm-cache.outputs.cache-hit != 'true'
+      if: inputs.useNpmCI == 'false' && steps.npm-cache.outputs.cache-hit != 'true'
       with:
         path: |
           node_modules
