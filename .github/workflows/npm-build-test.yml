@@ -64,8 +64,12 @@ jobs:
     name: Install
     if: inputs.buildOnly != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
       - name: Install with npm ci
         uses: cloudbeds/workflows/.github/actions/npm-install@main
         env:
@@ -75,7 +79,6 @@ jobs:
     name: Lint
     if: inputs.buildOnly != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - name: Lint
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
