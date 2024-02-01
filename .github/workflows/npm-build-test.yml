@@ -31,12 +31,12 @@ on:
       ref:
         description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
         required: false
-        default: ''
+        default: ""
         type: string
       envVars:
         description: List of environment variables to set up, given in VAR=value format.
         required: false
-        default: ''
+        default: ""
         type: string
       testCoverageAnnotations:
         description: Annotation type for test coverage should be 'all', 'none', 'coverage' or 'failed-tests'
@@ -66,8 +66,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Debug ENV
+        run: |
+          env | grep GITHUB_ | sort
+
       - name: Lint
-        uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
+        uses: cloudbeds/workflows/.github/actions/npm-install-lint@emo/test
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
