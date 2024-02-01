@@ -29,6 +29,8 @@ runs:
         ref: ${{ inputs.ref }}
 
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
+      with:
+        useNpmCI: false
 
     - name: Test
       shell: bash
