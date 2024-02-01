@@ -33,7 +33,13 @@ runs:
         npm config set audit=false fund=false
         du -sh node_modules || true
         ls -al ~/.cache || true
+
         time npm ci
+        sleep 2
+
+        time npm ci
+        sleep 2
+
         du -sh node_modules || true
 
     - name: NPM cache push
