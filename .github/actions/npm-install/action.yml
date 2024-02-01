@@ -34,10 +34,10 @@ runs:
         du -sh node_modules || true
         ls -al ~/.cache || true
 
-        time npm ci
+        time npm i
         sleep 2
 
-        time npm ci
+        time npm i
         sleep 2
 
         du -sh node_modules || true
