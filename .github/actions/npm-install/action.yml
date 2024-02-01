@@ -32,6 +32,7 @@ runs:
         export HUSKY=0
         npm config set audit=false fund=false
         du -sh node_modules || true
+        ls -al ~/.cache || true
         time npm ci
         du -sh node_modules || true
 
