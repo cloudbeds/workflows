@@ -1,6 +1,12 @@
 name: Install NPM packages
 description: Adds NPM token and install node modules
 
+inputs:
+  useNpmCI:
+    description: Use npm ci instead of npm install
+    default: 'true'
+    required: false
+
 runs:
   using: composite
   steps:
@@ -17,12 +23,13 @@ runs:
       uses: actions/setup-node@v4
       with:
         cache: npm
+        node-version: 20.x
 
     - name: Add NPM token to .npmrc
       shell: bash
       run:
-        if [[ -n $NPM_TOKEN && ! -f .npmrc ]];
-          then echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc;
+        if [[ -n $NPM_TOKEN && ! -f .npmrc ]]; then
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc;
         fi
 
     - name: Install dependencies
@@ -30,7 +37,11 @@ runs:
       run: |
         export HUSKY=0
         npm config set audit=false fund=false
-        npm ci
+        if [[ '${{ inputs.useNpmCI }}' == 'true' ]]; then 
+          npm ci
+        else
+          npm install
+        fi
 
     - name: NPM cache push
       uses: actions/cache/save@v4
