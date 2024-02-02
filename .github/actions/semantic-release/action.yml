@@ -51,7 +51,7 @@ runs:
   using: composite
   steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.GITHUB_TOKEN }}
@@ -62,7 +62,7 @@ runs:
 
     - if: inputs.withoutBuiltArtifact != 'true'
       name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifactName }}
         path: ${{ inputs.artifactPath }}
@@ -122,8 +122,7 @@ runs:
         echo ""
 
     - name: Semantic Release
-      # https://github.com/cycjimmy/semantic-release-action v3.4.2
-      uses: cycjimmy/semantic-release-action@8e58d20d0f6c8773181f43eb74d6a05e3099571d
+      uses: cycjimmy/semantic-release-action@v4
       id: semantic-release
       with:
         branches: |

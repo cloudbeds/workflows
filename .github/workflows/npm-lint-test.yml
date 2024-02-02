@@ -28,7 +28,7 @@ jobs:
     name: Test
     runs-on: ${{ inputs.runner }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: cloudbeds/workflows/.github/actions/npm-install@main
 
       - name: Test
