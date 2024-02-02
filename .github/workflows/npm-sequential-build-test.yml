@@ -109,7 +109,7 @@ jobs:
       - name: Find Current Pull Request
         if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
         id: findPr
-        uses: jwalton/gh-find-current-pr@v1.3.2
+        uses: jwalton/gh-find-current-pr@v1.3.3
 
       - name: Report Test Coverage
         if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
