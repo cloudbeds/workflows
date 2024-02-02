@@ -30,7 +30,7 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install
         uses: cloudbeds/workflows/.github/actions/npm-install@main
@@ -47,7 +47,7 @@ jobs:
         run: npm run test --if-present
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: ${{ inputs.artifactPath }}

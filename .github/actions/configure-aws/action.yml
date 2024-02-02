@@ -20,7 +20,7 @@ runs:
     - name: Configure AWS credentials
       id: aws-auth
       continue-on-error: true
-      uses: aws-actions/configure-aws-credentials@v2.2.0
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws-region }}
         role-to-assume: ${{ inputs.role-to-assume }}
@@ -35,7 +35,7 @@ runs:
       id: aws-auth2
       continue-on-error: true
       if: steps.aws-auth.outcome != 'success'
-      uses: aws-actions/configure-aws-credentials@v2.2.0
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws-region }}
         role-to-assume: ${{ inputs.role-to-assume }}
@@ -50,7 +50,7 @@ runs:
       id: aws-auth3
       continue-on-error: true
       if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success'
-      uses: aws-actions/configure-aws-credentials@v2.2.0
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws-region }}
         role-to-assume: ${{ inputs.role-to-assume }}
@@ -63,7 +63,7 @@ runs:
 
     - name: Configure AWS credentials 3rd Retry
       if: steps.aws-auth.outcome != 'success' && steps.aws-auth2.outcome != 'success' && steps.aws-auth3.outcome != 'success'
-      uses: aws-actions/configure-aws-credentials@v2.2.0
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ inputs.aws-region }}
         role-to-assume: ${{ inputs.role-to-assume }}
