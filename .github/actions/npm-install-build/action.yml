@@ -2,20 +2,9 @@ name: NPM Install and Build
 description: Github action to build node projects
 
 inputs:
-  artifactName:
-    description: Name of the uploaded build artifact
-    default: build-artifact
-    required: false
-  artifactPath:
-    description: Destination path for the downloaded build artifact
-    default: dist
-    required: false
   npmScript:
     description: Custom build script name
     default: build
-    required: false
-  withoutBuiltArtifact:
-    description: Skip uploading the build artifact
     required: false
   envVars:
     description: List of environment variables to set up, given in VAR=value format.
@@ -46,10 +35,3 @@ runs:
         done
 
         npm run ${{ inputs.npmScript }}
-
-    - uses: actions/upload-artifact@v4
-      if: inputs.withoutBuiltArtifact != 'true'
-      with:
-        name: ${{ inputs.artifactName }}
-        path: ${{ inputs.artifactPath }}
-        if-no-files-found: error

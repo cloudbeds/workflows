@@ -16,6 +16,11 @@ on:
         required: false
         default: ubuntu-latest
         type: string
+      artifactName:
+        description: Name of the uploaded build artifact
+        required: false
+        default: build-artifact
+        type: string
       artifactPath:
         description: Destination path for the downloaded build artifact
         required: false
@@ -44,11 +49,14 @@ jobs:
     runs-on: ${{ inputs.runner }}
     steps:
       - uses: cloudbeds/workflows/.github/actions/npm-install-build@main
-        with:
-          artifactPath: ${{ inputs.artifactPath }}
-          withoutCoverage: true
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifactName }}
+          path: ${{ inputs.artifactPath }}
+          if-no-files-found: error
 
   release:
     name: Publish to NPM 🚀

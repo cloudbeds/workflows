@@ -124,6 +124,14 @@ jobs:
     outputs:
       appVersion: ${{ steps.version-from-package-json.outputs.VERSION }}
     steps:
+      - name: Build
+        uses: cloudbeds/workflows/.github/actions/npm-install-build@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        with:
+          envVars: ${{ inputs.envVars }}
+          ref: ${{ inputs.ref }}
+
       - id: version-from-package-json
         shell: bash
         run: |
@@ -135,12 +143,8 @@ jobs:
         with:
           artifactPath: ${{ inputs.artifactPath }}
 
-      - name: Build
-        uses: cloudbeds/workflows/.github/actions/npm-install-build@main
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/upload-artifact@v4
         with:
-          artifactName: ${{ inputs.artifactName }}
-          artifactPath: ${{ inputs.artifactPath }}
-          envVars: ${{ inputs.envVars }}
-          ref: ${{ inputs.ref }}
+          name: ${{ inputs.artifactName }}
+          path: ${{ inputs.artifactPath }}
+          if-no-files-found: error
