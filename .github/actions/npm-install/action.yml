@@ -19,10 +19,18 @@ runs:
           node_modules
         key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
 
+    - name: Get node.js version from .nvmrc
+      shell: bash
+      run: |
+        if [[ -f .nvmrc ]]; then
+          echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+        fi
+
     - name: Initialize npm cache for global packages
       uses: actions/setup-node@v4
       with:
         cache: npm
+        node-version: ${{ env.NODE_VERSION || '20' }}
 
     - name: Add NPM token to .npmrc
       shell: bash
