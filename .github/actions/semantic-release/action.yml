@@ -26,6 +26,9 @@ inputs:
     description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
     default: ''
     required: false
+  extraPlugins:
+    description: Additional array of plugins to be added to the .releaserc file in JSON format
+    required: false
   GITHUB_TOKEN:
     description: Secret Cloudbeds Github token with write permission
     required: true
@@ -85,41 +88,51 @@ runs:
         echo ""
 
     - name: Create config file for Semantic Release
-      shell: bash
-      run: |
-        echo ""
-        if [[ '${{inputs.withoutChangelog}}' != 'true' ]]; then
-          CHANGELOG_PLUGIN='"@semantic-release/changelog",'
-        fi
-        if [[ '${{inputs.withoutNpmPlugin}}' != 'true' ]]; then
-          NPM_PLUGIN='"@semantic-release/npm", {
-            "npmPublish": ${{inputs.publishToNpm == 'true'}},
-          },'
-        fi
-
-        cat << EOF > .releaserc
-        {
-          "plugins": [
-            ["@semantic-release/commit-analyzer", {
-              "releaseRules": [
-                {"type": "perf", "release": "patch"},
-                {"type": "refactor", "release": "patch"},
-                {"type": "revert", "release": "patch"}
-              ] 
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const inputs = ${{ toJSON(inputs) }};
+          
+          const plugins = [
+            ['@semantic-release/commit-analyzer', {
+              releaseRules: [
+                { type: 'perf', release: 'patch' },
+                { type: 'refactor', release: 'patch' },
+                { type: 'revert', release: 'patch' }
+              ]
             }],
-            "@semantic-release/release-notes-generator",
-            $CHANGELOG_PLUGIN
-            $NPM_PLUGIN
-            "@semantic-release/github",
-            "@semantic-release/git"
-          ]
-        }
-        EOF
-        
-        echo "::group::📂 Contents of .releaserc"
-        cat .releaserc
-        echo "::endgroup::"
-        echo ""
+            '@semantic-release/release-notes-generator',
+          ];
+
+          if (inputs.withoutChangelog !== 'true') {
+            plugins.push('@semantic-release/changelog');
+          }
+
+          if (inputs.withoutNpmPlugin !== 'true') {
+            plugins.push([
+              '@semantic-release/npm',
+              { npmPublish: inputs.publishToNpm === 'true' },
+            ]);
+          }
+
+          plugins.push('@semantic-release/github');
+          plugins.push('@semantic-release/git');
+          
+          const extraPlugins = JSON.parse(inputs.extraPlugins || '[]');
+          
+          if (extraPlugins.length) {
+            extraPlugins.forEach(plugin => plugins.push(plugin));
+          }
+          
+          fs.writeFileSync('.releaserc', JSON.stringify({ plugins }, null, 2));
+          
+          const extraPluginNames = extraPlugins.map(plugin => Array.isArray(plugin) ? plugin[0] : plugin).join(' ');
+          core.exportVariable('EXTRA_PLUGINS', extraPluginNames);
+          
+          console.log('::group::📂 Contents of .releaserc:');
+          console.log(fs.readFileSync('.releaserc'));
+          console.log('::endgroup::');
 
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v4
@@ -133,6 +146,7 @@ runs:
         extra_plugins: |
           @semantic-release/changelog
           @semantic-release/git
+          ${{ env.EXTRA_PLUGINS }}
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
