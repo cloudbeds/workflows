@@ -12,6 +12,21 @@ on:
         required: false
         default: dist
         type: string
+
+    outputs:
+      isReleased:
+        description: Whether a new release was published. Contains "true" or "false" string
+        value: ${{ jobs.release.outputs.isReleased }}
+      releasedVersion:
+        description: The version of the release that actually happened
+        value: ${{ jobs.release.outputs.releasedVersion }}
+      previousVersion:
+        description: Version of the previous release, if there was one
+        value: ${{ jobs.release.outputs.previousVersion }}
+      releasedSHA:
+        description: The SHA of the commit that was released, that contains the [skip-ci] commit
+        value: ${{ jobs.release.outputs.releasedSHA }}
+
     secrets:
       NPM_TOKEN:
         required: true
@@ -22,9 +37,15 @@ jobs:
   release:
     name: Publish to NPM 🚀
     runs-on: ubuntu-latest
+    outputs:
+      isReleased: ${{ steps.semantic-release.outputs.isReleased }}
+      releasedVersion: ${{ steps.semantic-release.outputs.releasedVersion }}
+      previousVersion: ${{ steps.semantic-release.outputs.previousVersion }}
+      releasedSHA: ${{ steps.semantic-release.outputs.releasedSHA }}
     steps:
       - name: Semantic Release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
+        id: semantic-release
         with:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}

@@ -11,6 +11,21 @@ on:
         description: Destination path for the downloaded build artifact
         required: false
         type: string
+
+    outputs:
+      isReleased:
+        description: Whether a new release was published. Contains "true" or "false" string
+        value: ${{ jobs.release.outputs.isReleased }}
+      releasedVersion:
+        description: The version of the release that actually happened
+        value: ${{ jobs.release.outputs.releasedVersion }}
+      previousVersion:
+        description: Version of the previous release, if there was one
+        value: ${{ jobs.release.outputs.previousVersion }}
+      releasedSHA:
+        description: The SHA of the commit that was released, that contains the [skip-ci] commit
+        value: ${{ jobs.release.outputs.releasedSHA }}
+
     secrets:
       CB_CI_WORKFLOW_TOKEN:
         required: true
@@ -19,8 +34,14 @@ jobs:
   release:
     name: Release 🚀
     runs-on: ubuntu-latest
+    outputs:
+      isReleased: ${{ steps.semantic-release.outputs.isReleased }}
+      releasedVersion: ${{ steps.semantic-release.outputs.releasedVersion }}
+      previousVersion: ${{ steps.semantic-release.outputs.previousVersion }}
+      releasedSHA: ${{ steps.semantic-release.outputs.releasedSHA }}
     steps:
       - name: Semantic Release
+        id: semantic-release
         uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
           artifactName: ${{ inputs.artifactName }}
