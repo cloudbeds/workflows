@@ -98,21 +98,21 @@ jobs:
         run: |
           if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
             npm run test:coverage:ci
-            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_ENV
           elif [[ $(jq '.scripts["test:coverage"]' < package.json;) != null ]]; then
             npm run test:coverage
-            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_ENV
           else
             npm run test --if-present
           fi
 
       - name: Find Current Pull Request
-        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        if: env.INCLUDE_COVERAGE_REPORT == 'true'
         id: findPr
         uses: jwalton/gh-find-current-pr@v1.3.3
 
       - name: Report Test Coverage
-        if: steps.test.outputs.INCLUDE_COVERAGE_REPORT == 'true'
+        if: env.INCLUDE_COVERAGE_REPORT == 'true'
         uses: ArtiomTr/jest-coverage-report-action@v2.2.4
         with:
           prnumber: ${{ steps.findPr.outputs.number }}

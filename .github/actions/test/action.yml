@@ -1,11 +1,17 @@
 name: Tests
 description: Action to run the full suite of tests
 
+outputs:
+  hasCoverageReport:
+    description: Whether coverage report is included
+    value: ${{ steps.test.outputs.INCLUDE_COVERAGE_REPORT }}
+
 runs:
   using: composite
   steps:
     - name: Test
       shell: bash
+      id: test
       run: |
         if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null ]]; then
           npm run test:coverage:ci
