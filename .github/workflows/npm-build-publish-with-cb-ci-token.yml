@@ -1,0 +1,30 @@
+name: Build and Publish an npm package
+
+on:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
+      CB_CI_WORKFLOW_TOKEN:
+        required: true
+
+jobs:
+  build-publish:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout, Install packages and Build
+        uses: cloudbeds/workflows/.github/actions/npm-install-build@main
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Semantic release and Publish to npm
+        uses: cloudbeds/workflows/.github/actions/semantic-release@main
+        with:
+          publishToNpm: true
+          withoutBuiltArtifact: true
+          withoutCheckout: true
+          GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
