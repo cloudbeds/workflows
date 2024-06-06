@@ -26,12 +26,6 @@ runs:
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
         fi
 
-#    - name: Install particular version of node.js and initialize npm cache for global packages
-#      uses: actions/setup-node@v4
-#      with:
-#        cache: npm
-#        node-version: ${{ env.NODE_VERSION || '20' }}
-
     - name: Add NPM token to .npmrc
       shell: bash
       run:

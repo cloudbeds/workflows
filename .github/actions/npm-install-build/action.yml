@@ -14,6 +14,10 @@ inputs:
     description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
     required: false
     default: ''
+  GITHUB_TOKEN:
+    description: Secret Cloudbeds Github token with write permission
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -22,6 +26,7 @@ runs:
       uses: actions/checkout@v4
       with:
         ref: ${{ inputs.ref }}
+        token: ${{ inputs.GITHUB_TOKEN }}
 
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
