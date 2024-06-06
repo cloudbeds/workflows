@@ -10,14 +10,17 @@ inputs:
     description: Destination path for the downloaded build artifact
     default: dist
     required: false
-  withoutBuiltArtifact:
-    description: Indicates that no artifact should be downloaded
-    required: false
   publishToNpm:
     description: Enable this to publish artifacts to NPM
     required: false
+  withoutBuiltArtifact:
+    description: Indicates that no artifact should be downloaded
+    required: false
   withoutChangelog:
     description: Enable this to prevent @semantic-release/changelog from writing a CHANGELOG file
+    required: false
+  withoutCheckout:
+    description: Enable this to prevent running actions/checkout
     required: false
   withoutNpmPlugin:
     description: Enable this to prevent @semantic-release/npm from writing package.json
@@ -53,7 +56,8 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Checkout
+    - if: inputs.withoutCheckout != 'true'
+      name: Checkout
       uses: actions/checkout@v4
       with:
         ref: ${{ inputs.ref }}
