@@ -26,7 +26,7 @@ runs:
       uses: actions/checkout@v4
       with:
         ref: ${{ inputs.ref }}
-        token: ${{ inputs.GITHUB_TOKEN }}
+        token: ${{ inputs.GITHUB_TOKEN || github.token }}
 
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
