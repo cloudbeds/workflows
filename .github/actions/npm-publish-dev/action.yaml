@@ -1,0 +1,42 @@
+name: Publish dev build to NPM
+description: Publish dev version to NPM registry (e.g. 2.2.0-dev.0)
+
+inputs:
+  NPM_TOKEN:
+    description: NPM Token
+    required: true
+  releaseChannel:
+    description: Release channel (e.g. dev, rc)
+    default: dev
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: cloudbeds/workflows/.github/actions/npm-install@main
+      env:
+        NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
+
+    - shell: bash
+      run: |
+        RECENT_VERSION=$(npm view . versions --json | awk '!/[\]-]/' | tail -1 | awk '{print gensub("[, \"]", "", "G")}')
+        RECENT_PRERELEASE_VERSION_WITH_TAG=$(npm view . versions --json | grep ${{ inputs.releaseChannel }} | tail -1 | awk '{print gensub("[, \"]", "", "G")}')
+        RECENT_PRERELEASE_VERSION=$(echo $RECENT_PRERELEASE_VERSION_WITH_TAG | awk '{print gensub("-.*", "", "G")}')
+        echo ""
+        echo "Recent version published on NPM is $RECENT_VERSION"
+        echo "Recent pre-release version published on NPM is $RECENT_PRERELEASE_VERSION_WITH_TAG"
+        echo ""
+
+        function verToNumber { printf "%03d%03d%03d%03d" $(echo "10$1" | tr '.' ' '); }
+        if [[ -z $RECENT_PRERELEASE_VERSION || $(verToNumber $RECENT_VERSION) -gt $(verToNumber $RECENT_PRERELEASE_VERSION) ]]; then
+          VERSION=$RECENT_VERSION
+        else
+          VERSION=$RECENT_PRERELEASE_VERSION_WITH_TAG
+        fi
+
+        npm version $VERSION --allow-same-version --git-tag-version false
+        npm version prerelease --preid=${{ inputs.releaseChannel }} --git-tag-version false
+        
+        npm publish --tag ${{ inputs.releaseChannel }}
+        
+        echo "::notice::🆕 Version $(cat package.json | jq -r '.version') was published"
