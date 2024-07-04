@@ -20,7 +20,7 @@ runs:
     - shell: bash
       run: |
         RECENT_VERSION=$(npm view . versions --json | awk '!/[\]-]/' | tail -1 | awk '{print gensub("[, \"]", "", "G")}')
-        RECENT_PRERELEASE_VERSION_WITH_TAG=$(npm view . versions --json | grep ${{ inputs.releaseChannel }} | tail -1 | awk '{print gensub("[, \"]", "", "G")}')
+        RECENT_PRERELEASE_VERSION_WITH_TAG=$(npm view . versions --json | grep ${{ inputs.releaseChannel }} | tail -1 | awk '{print gensub("[, \"]", "", "G")}' || true)
         RECENT_PRERELEASE_VERSION=$(echo $RECENT_PRERELEASE_VERSION_WITH_TAG | awk '{print gensub("-.*", "", "G")}')
         echo ""
         echo "Recent version published on NPM is $RECENT_VERSION"
