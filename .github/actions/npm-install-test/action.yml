@@ -13,6 +13,10 @@ inputs:
     description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
     required: false
     default: ''
+  retries:
+    description: Number of additional attempts to retry the test step on failure
+    required: false
+    default: '0'
 
 outputs:
   hasCoverageReport:
@@ -43,12 +47,36 @@ runs:
         # deprecated
         npm run downloadTypes --if-present
 
-        if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
-          npm run test:coverage:ci
-          echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
-        elif [[ $(jq '.scripts["test:coverage"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
-          npm run test:coverage
-          echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
-        else
-          npm run test --if-present
+        maxRuns=$(( ${{ inputs.retries }} + 1 ))
+        runCounter=1
+
+        until [ $runCounter -gt $maxRuns ]
+        do
+          if [ $runCounter -gt 1 ]; then
+            echo "::group::Retry run $runCounter of $maxRuns"
+          fi
+        
+          if [[ $(jq '.scripts["test:coverage:ci"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
+            npm run test:coverage:ci && break
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          elif [[ $(jq '.scripts["test:coverage"]' < package.json;) != null && "${{ inputs.withoutCoverage }}" != 'true' ]]; then
+            npm run test:coverage && break
+            echo "INCLUDE_COVERAGE_REPORT=true" >> $GITHUB_OUTPUT
+          else
+            npm run test --if-present && break
+          fi
+
+          echo "Test suite failed. Retrying..."
+          runCounter=$((runCounter + 1))
+
+          if [ $runCounter -gt 1 ]; then
+            echo "::endgroup::"
+          fi
+        done
+
+        if [ $runCounter -gt $maxRuns ]; then
+          if [ $runCounter -gt 1 ]; then
+            echo "::warning::Test suite failed after $maxRuns attempts"
+          fi
+          exit 1
         fi

@@ -43,6 +43,11 @@ on:
         required: false
         default: coverage
         type: string
+      testRetries:
+        description: Number of additional attempts to retry the test job on failure
+        required: false
+        type: number
+        default: 0
       writeBuildInfo:
         description: Whether to write build info to a file
         required: false
@@ -101,6 +106,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           envVars: ${{ inputs.envVars }}
+          retries: ${{ inputs.testRetries }}
           ref: ${{ inputs.ref }}
 
       - name: Find Current Pull Request
