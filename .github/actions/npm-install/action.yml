@@ -46,7 +46,7 @@ runs:
         if [[ '${{ inputs.useNpmCI }}' == 'true' ]]; then 
           npm ci ${{ inputs.npmArgs }}
         else
-          npm install
+          npm install ${{ inputs.npmArgs }}
         fi
 
     - name: NPM cache push
