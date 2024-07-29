@@ -7,7 +7,7 @@ inputs:
     default: 'true'
     required: false
 
-  NpmArgs:
+  npmArgs:
     description: Additional arguments to pass to NPM
     default: ''
     required: false
@@ -44,7 +44,7 @@ runs:
         export HUSKY=0
         npm config set audit=false fund=false
         if [[ '${{ inputs.useNpmCI }}' == 'true' ]]; then 
-          npm ci ${{ inputs.NpmArgs }}
+          npm ci ${{ inputs.npmArgs }}
         else
           npm install
         fi
