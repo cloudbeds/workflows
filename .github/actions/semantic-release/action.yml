@@ -38,6 +38,10 @@ inputs:
   NPM_TOKEN:
     description: Secret NPM token
     required: false
+  npmArgs:
+    description: Additional arguments to pass to NPM
+    default: ''
+    required: false        
 
 outputs:
   isReleased:
@@ -65,7 +69,9 @@ runs:
 
     # install node_modules since there might be a dependency from husky which is invoked during npm publish
     - if: inputs.publishToNpm == 'true'
-      uses: cloudbeds/workflows/.github/actions/npm-install@main
+      uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
+      with:
+        npmArgs: ${{ inputs.npmArgs }}
 
     - if: inputs.withoutBuiltArtifact != 'true'
       name: Download artifact
