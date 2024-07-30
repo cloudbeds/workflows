@@ -72,3 +72,4 @@ jobs:
           publishToNpm: true
           GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npmArgs: ${{ inputs.npmArgs }}
