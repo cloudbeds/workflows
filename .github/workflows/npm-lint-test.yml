@@ -13,6 +13,11 @@ on:
         required: false
         default: ubuntu-latest
         type: string
+      npmArgs:
+        description: Additional arguments to pass to NPM
+        default: ''
+        required: false            
+        type: string
 
 jobs:
   lint:
@@ -30,6 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: cloudbeds/workflows/.github/actions/npm-install@main
+        with:
+          npmArgs: ${{ inputs.npmArgs }}
 
       - name: Test
         id: test
