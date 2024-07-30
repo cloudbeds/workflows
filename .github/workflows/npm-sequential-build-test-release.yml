@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install
-        uses: cloudbeds/workflows/.github/actions/npm-install@main
+        uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
         with:
           npmArgs: ${{ inputs.npmArgs }}
 
