@@ -21,6 +21,10 @@ on:
         required: false
         default: dist
         type: string
+      npmArgs:
+        description: Additional arguments to pass to NPM
+        default: ''
+        required: false           
 
 jobs:
   test-and-build:
@@ -34,6 +38,8 @@ jobs:
 
       - name: Install
         uses: cloudbeds/workflows/.github/actions/npm-install@main
+        with:
+          npmArgs: ${{ inputs.npmArgs }}
 
       - name: Lint
         run: |

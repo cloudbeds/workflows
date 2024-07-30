@@ -18,6 +18,10 @@ inputs:
     description: Secret Cloudbeds Github token with write permission
     required: false
     default: ''
+  npmArgs:
+    description: Additional arguments to pass to NPM
+    default: ''
+    required: false    
 
 runs:
   using: composite
@@ -31,6 +35,7 @@ runs:
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
         useNpmCI: false
+        npmArgs: ${{ inputs.npmArgs }}
 
     - name: Build
       shell: bash

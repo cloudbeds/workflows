@@ -9,11 +9,17 @@ inputs:
     description: Release channel (e.g. dev, rc)
     default: dev
     required: false
+  npmArgs:
+    description: Additional arguments to pass to NPM
+    default: ''
+    required: false    
 
 runs:
   using: composite
   steps:
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
+      with:
+        npmArgs: ${{ inputs.npmArgs }}
       env:
         NPM_TOKEN: ${{ inputs.NPM_TOKEN }}
 
