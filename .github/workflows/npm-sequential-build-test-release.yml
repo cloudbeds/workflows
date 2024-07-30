@@ -23,6 +23,7 @@ on:
         type: string
       npmArgs:
         description: Additional arguments to pass to NPM
+        type: string
         default: ''
         required: false           
 
