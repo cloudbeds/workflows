@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Lint
         uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
+        with:
+          npmArgs: ${{ inputs.npmArgs }}        
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 

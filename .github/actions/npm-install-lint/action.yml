@@ -10,6 +10,10 @@ inputs:
     description: The branch, tag or SHA to checkout. Defaults to the SHA for the event that triggered the workflow.
     required: false
     default: ''
+  npmArgs:
+    description: Additional arguments to pass to NPM
+    default: ''
+    required: false    
 
 runs:
   using: composite
@@ -22,6 +26,7 @@ runs:
     - uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
         useNpmCI: false
+        npmArgs: ${{ inputs.npmArgs }}
 
     - name: Lint
       shell: bash
