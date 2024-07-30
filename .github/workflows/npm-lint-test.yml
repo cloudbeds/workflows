@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint
-        uses: cloudbeds/workflows/.github/actions/npm-install-lint@feat/allow-npm-args-in-more-places
+        uses: cloudbeds/workflows/.github/actions/npm-install-lint@main
         with:
           npmArgs: ${{ inputs.npmArgs }}        
         env:
@@ -36,7 +36,7 @@ jobs:
     runs-on: ${{ inputs.runner }}
     steps:
       - uses: actions/checkout@v4
-      - uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
+      - uses: cloudbeds/workflows/.github/actions/npm-install@main
         with:
           npmArgs: ${{ inputs.npmArgs }}
 

@@ -17,7 +17,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
+    - uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
         npmArgs: ${{ inputs.npmArgs }}
       env:

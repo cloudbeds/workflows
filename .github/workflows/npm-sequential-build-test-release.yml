@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install
-        uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
+        uses: cloudbeds/workflows/.github/actions/npm-install@main
         with:
           npmArgs: ${{ inputs.npmArgs }}
 
@@ -65,7 +65,7 @@ jobs:
     needs: test-and-build
     steps:
       - name: Semantic Release
-        uses: cloudbeds/workflows/.github/actions/semantic-release@feat/allow-npm-args-in-more-places
+        uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
           artifactName: build-artifact
           artifactPath: ${{ inputs.artifactPath }}

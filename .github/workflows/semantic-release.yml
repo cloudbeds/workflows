@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Semantic Release
         id: semantic-release
-        uses: cloudbeds/workflows/.github/actions/semantic-release@feat/allow-npm-args-in-more-places
+        uses: cloudbeds/workflows/.github/actions/semantic-release@main
         with:
           artifactName: ${{ inputs.artifactName }}
           artifactPath: ${{ inputs.artifactPath }}

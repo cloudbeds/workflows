@@ -69,7 +69,7 @@ runs:
 
     # install node_modules since there might be a dependency from husky which is invoked during npm publish
     - if: inputs.publishToNpm == 'true'
-      uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
+      uses: cloudbeds/workflows/.github/actions/npm-install@main
       with:
         npmArgs: ${{ inputs.npmArgs }}
 
