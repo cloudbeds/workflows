@@ -32,7 +32,7 @@ runs:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.GITHUB_TOKEN || github.token }}
 
-    - uses: cloudbeds/workflows/.github/actions/npm-install@main
+    - uses: cloudbeds/workflows/.github/actions/npm-install@feat/allow-npm-args-in-more-places
       with:
         useNpmCI: false
         npmArgs: ${{ inputs.npmArgs }}
