@@ -15,7 +15,6 @@ on:
         type: string
       npmArgs:
         description: Additional arguments to pass to NPM
-        default: ''
         required: false            
         type: string
 
