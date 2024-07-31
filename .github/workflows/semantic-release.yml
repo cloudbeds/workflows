@@ -11,6 +11,10 @@ on:
         description: Destination path for the downloaded build artifact
         required: false
         type: string
+      npmArgs:
+        description: Additional arguments to pass to NPM
+        type: string
+        required: false           
 
     outputs:
       isReleased:
@@ -48,3 +52,4 @@ jobs:
           artifactPath: ${{ inputs.artifactPath }}
           withoutBuiltArtifact: ${{ !inputs.artifactName && 'true' }}
           GITHUB_TOKEN: ${{ secrets.CB_CI_WORKFLOW_TOKEN || secrets.GITHUB_TOKEN }}
+          npmArgs: ${{ inputs.npmArgs }}
