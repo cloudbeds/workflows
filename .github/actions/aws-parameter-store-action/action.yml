@@ -1,0 +1,28 @@
+name: AWS SSM Parameter Store Action
+description: Put parameters' value out to file by path
+
+inputs:
+  aws-region:
+    description: AWS_REGION
+    required: true
+  path:
+    description: Path to the parameter to retrieve
+    required: true
+  with-decryption:
+    description: Whether to decrypt
+    required: false
+    default: 'true'
+  format:
+    description: Format to save as _dotenv_ or _as-is_. `outputs` are available even if it is empty
+    required: false
+  filename:
+    description: File name to be written
+    required: false
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: chevron-up
+  color: green

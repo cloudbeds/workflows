@@ -1,0 +1,23 @@
+{
+  "name": "aws-parameter-store-action",
+  "description": "AWS SSM Parameter Store Action",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "author": "Original author: GY Noh <nohmad@gmail.com> - Modified",
+  "scripts": {
+    "build": "npx ncc build index.ts -m"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@aws-sdk/client-ssm": "^3.651.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "@vercel/ncc": "^0.38.1",
+    "typescript": "^5.6.2"
+  }
+}
