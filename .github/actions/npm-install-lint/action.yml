@@ -36,8 +36,6 @@ runs:
         done
 
         npm run download-types --if-present
-        # deprecated
-        npm run downloadTypes --if-present
 
         npm run lint --if-present
         npm run lint:ts --if-present
