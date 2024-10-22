@@ -46,12 +46,10 @@ on:
       writeBuildInfo:
         description: Whether to write build info to a file
         required: false
-        default: false
         type: string
       buildOnly:
         description: Whether to only build the project without lint and test
         required: false
-        default: false
         type: string
 
     outputs:
@@ -60,21 +58,6 @@ on:
         value: ${{ jobs.build.outputs.appVersion }}
 
 jobs:
-  install:
-    name: Install
-    if: inputs.buildOnly != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref }}
-
-      - name: Install with npm ci
-        uses: cloudbeds/workflows/.github/actions/npm-install@main
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   lint:
     name: Lint
     if: inputs.buildOnly != 'true'
