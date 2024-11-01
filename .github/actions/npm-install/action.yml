@@ -42,7 +42,10 @@ runs:
       shell: bash
       run: |
         export HUSKY=0
+        export SKIP_INSTALL_SIMPLE_GIT_HOOKS=1
+
         npm config set audit=false fund=false
+
         if [[ '${{ inputs.useNpmCI }}' == 'true' ]]; then 
           npm ci ${{ inputs.npmArgs }}
         else
