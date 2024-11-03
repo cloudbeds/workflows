@@ -6,10 +6,13 @@ inputs:
     description: Use npm ci instead of npm install
     default: 'true'
     required: false
-
   npmArgs:
     description: Additional arguments to pass to NPM
     default: ''
+    required: false
+  workingDirectory:
+    description: Directory to run npm commands in
+    default: '.'
     required: false
 
 runs:
@@ -21,11 +24,12 @@ runs:
       id: npm-cache
       with:
         path: |
-          node_modules
-        key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('package-lock.json') }}
+          ${{ inputs.workingDirectory }}/node_modules
+        key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('${{ inputs.workingDirectory }}/package-lock.json') }}
 
     - name: Get node.js version from .nvmrc
       shell: bash
+      working-directory: ${{ inputs.workingDirectory }}
       run: |
         if [[ -f .nvmrc ]]; then
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
@@ -33,13 +37,15 @@ runs:
 
     - name: Add NPM token to .npmrc
       shell: bash
-      run:
+      working-directory: ${{ inputs.workingDirectory }}
+      run: |
         if [[ -n $NPM_TOKEN && ! -f .npmrc ]]; then
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc;
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
         fi
 
     - name: Install dependencies
       shell: bash
+      working-directory: ${{ inputs.workingDirectory }}
       run: |
         export HUSKY=0
         export SKIP_INSTALL_SIMPLE_GIT_HOOKS=1
@@ -57,5 +63,5 @@ runs:
       if: inputs.useNpmCI == 'false' && steps.npm-cache.outputs.cache-hit != 'true'
       with:
         path: |
-          node_modules
+          ${{ inputs.workingDirectory }}/node_modules
         key: ${{ steps.npm-cache.outputs.cache-primary-key }}
