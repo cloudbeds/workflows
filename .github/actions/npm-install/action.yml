@@ -23,9 +23,8 @@ runs:
       uses: actions/cache/restore@v4
       id: npm-cache
       with:
-        path: |
-          ${{ inputs.workingDirectory }}/node_modules
-        key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('${{ inputs.workingDirectory }}/package-lock.json') }}
+        path: ${{ inputs.workingDirectory }}/node_modules
+        key: v1-npm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(format('{0}/package-lock.json', inputs.workingDirectory)) }}
 
     - name: Get node.js version from .nvmrc
       shell: bash
@@ -62,6 +61,5 @@ runs:
       uses: actions/cache/save@v4
       if: inputs.useNpmCI == 'false' && steps.npm-cache.outputs.cache-hit != 'true'
       with:
-        path: |
-          ${{ inputs.workingDirectory }}/node_modules
+        path: ${{ inputs.workingDirectory }}/node_modules
         key: ${{ steps.npm-cache.outputs.cache-primary-key }}
