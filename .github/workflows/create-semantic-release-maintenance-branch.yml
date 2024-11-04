@@ -85,7 +85,7 @@ jobs:
           MAINTENANCE_BRANCH="${{ steps.determine_target_version.outputs.maintenance_branch }}"
           LATEST_TAG="${{ steps.find_latest_tag.outputs.latest_tag }}"
           
-          if git ls-remote --heads origin "$MAINTENANCE_BRANCH" | grep -q "$MAINTENANCE_BRANCH"; then
+          if git ls-remote --heads origin "$MAINTENANCE_BRANCH" | grep -F -q "$MAINTENANCE_BRANCH"; then
             echo "Branch $MAINTENANCE_BRANCH already exists on remote."
             echo "::warning::No action taken. Maintenance branch '$MAINTENANCE_BRANCH' already exists."
             exit 0
