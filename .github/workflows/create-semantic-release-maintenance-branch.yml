@@ -1,0 +1,97 @@
+name: 🔧 Create Maintenance Branch
+
+on:
+  workflow_call:
+    inputs:
+      target_version:
+        type: string
+        description: 'Target version for maintenance branch (e.g., 1.2). Leave empty to use previous minor version.'
+        required: false
+
+jobs:
+  create-maintenance-branch:
+    name: 🔧 Create Maintenance Branch
+    runs-on: x1-core
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for tags
+
+      - name: Get Current Version
+        id: get_current_version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Determine Target Version
+        id: determine_target_version
+        run: |
+          INPUT_TARGET_VERSION="${{ github.event.inputs.target_version }}"
+          
+          # If target version is provided, validate format
+          if [[ -n "$INPUT_TARGET_VERSION" ]]; then
+            if [[ ! "$INPUT_TARGET_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+              echo "::error::Target version must be in format 'X.Y' (e.g., '1.2')"
+              exit 1
+            fi
+            TARGET_VERSION="$INPUT_TARGET_VERSION"
+          else
+            # Calculate target version from current version
+            CURRENT_VERSION="${{ steps.get_current_version.outputs.current_version }}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+            
+            if [[ "$MINOR" -eq 0 ]]; then
+              # Handle major version transition
+              PREV_MAJOR=$((MAJOR - 1))
+              if [[ "$PREV_MAJOR" -lt 1 ]]; then
+                echo "::error::No previous version exists."
+                exit 1
+              fi
+              # Find the latest minor version for the previous major version
+              PREV_MINOR=$(git tag -l "v${PREV_MAJOR}.*" --sort=-v:refname | head -n 1 | cut -d. -f2)
+              TARGET_VERSION="${PREV_MAJOR}.${PREV_MINOR}"
+            else
+              # Handle minor version transition
+              PREV_MINOR=$((MINOR - 1))
+              TARGET_VERSION="${MAJOR}.${PREV_MINOR}"
+            fi
+          fi
+          
+          MAINTENANCE_BRANCH="v${TARGET_VERSION}.x"
+          echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
+          echo "maintenance_branch=$MAINTENANCE_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Find Latest Tag for Target Version
+        id: find_latest_tag
+        run: |
+          git fetch --tags --force
+          TARGET_VERSION="${{ steps.determine_target_version.outputs.target_version }}"
+          TAG_PATTERN="v${TARGET_VERSION}.*"
+          
+          echo "Searching for tags matching pattern '$TAG_PATTERN'..."
+          LATEST_TAG=$(git tag -l "$TAG_PATTERN" --sort=-v:refname | head -n 1)
+          
+          if [[ -z "$LATEST_TAG" ]]; then
+            echo "::error::No tags found for version $TARGET_VERSION."
+            exit 1
+          fi
+          
+          echo "Found latest tag: $LATEST_TAG"
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create and Push Maintenance Branch
+        run: |
+          MAINTENANCE_BRANCH="${{ steps.determine_target_version.outputs.maintenance_branch }}"
+          LATEST_TAG="${{ steps.find_latest_tag.outputs.latest_tag }}"
+          
+          if git ls-remote --heads origin "$MAINTENANCE_BRANCH" | grep -q "$MAINTENANCE_BRANCH"; then
+            echo "Branch $MAINTENANCE_BRANCH already exists on remote."
+            echo "::warning::No action taken. Maintenance branch '$MAINTENANCE_BRANCH' already exists."
+            exit 0
+          fi
+          
+          echo "Creating maintenance branch '$MAINTENANCE_BRANCH' from tag '$LATEST_TAG'..."
+          git checkout -b "$MAINTENANCE_BRANCH" "$LATEST_TAG"
+          git push origin "$MAINTENANCE_BRANCH"
+          echo "Maintenance branch '$MAINTENANCE_BRANCH' created and pushed successfully."

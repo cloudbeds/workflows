@@ -33,7 +33,7 @@ inputs:
     description: Additional array of plugins to be added to the .releaserc file in JSON format
     required: false
   GITHUB_TOKEN:
-    description: Secret Cloudbeds Github token with write permission
+    description: Github token with write permission
     required: true
   NPM_TOKEN:
     description: Secret NPM token
