@@ -94,4 +94,4 @@ jobs:
           echo "Creating maintenance branch '$MAINTENANCE_BRANCH' from tag '$LATEST_TAG'..."
           git checkout -b "$MAINTENANCE_BRANCH" "$LATEST_TAG"
           git push origin "$MAINTENANCE_BRANCH"
-          echo "Maintenance branch '$MAINTENANCE_BRANCH' created and pushed successfully."
+          echo "::notice::🆕 Maintenance branch '$MAINTENANCE_BRANCH' created and pushed successfully."
